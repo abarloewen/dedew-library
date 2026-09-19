@@ -1,3 +1,11 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+<meta name="description" content="Private review build. English edition in preparation.">
 <title>Dedew Library</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -195,8 +203,32 @@ h3{font-size:18px;line-height:1.3}
 .more:hover{border-color:var(--accent)}
 .foot{border-top:1px solid var(--rule);padding-block:28px 44px;margin-top:38px;font-size:13px;color:var(--ink-faint)}
 .foot a{color:var(--accent)}
-</style>
 
+/* --- standalone build fixes (the artifact wrapper normally supplies these) --- */
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+img{max-width:100%}
+
+/* --- gate: mobile --- */
+.gate{
+  padding:clamp(20px,6vw,32px);
+  padding-top:calc(clamp(20px,6vw,32px) + env(safe-area-inset-top,0px));
+  padding-bottom:calc(clamp(20px,6vw,32px) + env(safe-area-inset-bottom,0px));
+}
+.gate-box{max-width:430px;width:100%}
+.gate h2{font-size:clamp(25px,7vw,34px);margin-bottom:12px}
+.gate p{font-size:15px}
+.gate form{flex-direction:column;gap:10px}
+.gate input,.gate button{width:100%;height:48px;font-size:16px}
+@media (min-width:430px){
+  .gate form{flex-direction:row}
+  .gate input{flex:1 1 auto;width:auto}
+  .gate button{width:auto;flex:0 0 auto}
+}
+
+</style>
+</head>
+<body>
 <div class="gate" id="gate">
   <div class="gate-box">
     <p class="eyebrow">Ummah Collective · private review build</p>
@@ -602,3 +634,5 @@ function boot(){
 }
 })();
 </script>
+</body>
+</html>
