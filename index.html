@@ -106,8 +106,11 @@ button{font:inherit;color:inherit}
 .hdr{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--paper) 90%,transparent);
   backdrop-filter:saturate(1.5) blur(14px);border-bottom:1px solid var(--rule)}
 .hdr-in{display:flex;align-items:center;gap:20px;height:66px}
-.brand{display:flex;align-items:baseline;gap:11px;text-decoration:none;margin-inline-end:auto;min-width:0}
-.brand-ar{font-family:var(--ar);font-size:23px;line-height:1;white-space:nowrap}
+.brand{display:flex;align-items:baseline;gap:11px;text-decoration:none;margin-inline-end:auto;min-width:0;overflow:hidden}
+.brand-ar{font-family:var(--ar);font-size:23px;line-height:1;white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis;min-width:0}
+@media (max-width:620px){.brand-ar{font-size:19px}}
+@media (max-width:480px){.brand-ar{font-size:15.5px}}
 .brand-en{font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-4);white-space:nowrap}
 @media (max-width:420px){.brand-en{display:none}}
 .nav{display:flex;gap:1px;align-items:center}
@@ -122,8 +125,13 @@ button{font:inherit;color:inherit}
 .iconbtn:hover{border-color:var(--rule);color:var(--ink)}
 .burger{display:none}
 @media (max-width:940px){
+  /* backdrop-filter on an ancestor makes it the containing block for fixed children,
+     which would trap this overlay inside the 66px header. Drop it at mobile widths. */
+  .hdr{backdrop-filter:none;background:var(--paper)}
   .nav{display:none;position:fixed;inset:0;z-index:60;flex-direction:column;justify-content:center;
-    gap:2px;background:var(--paper);padding:28px}
+    gap:2px;background:var(--paper);padding:28px;overflow-y:auto;
+    padding-top:calc(28px + env(safe-area-inset-top,0px));
+    padding-bottom:calc(28px + env(safe-area-inset-bottom,0px))}
   .nav.open{display:flex}
   .nav a{font-size:clamp(26px,7vw,34px);font-family:var(--display);font-weight:300;
     padding:14px 18px;text-align:center;animation:rise .5s var(--ease) both}
@@ -265,6 +273,80 @@ h3{font-size:19px;line-height:1.28;letter-spacing:-.01em}
   .pane-toggle{display:flex}.page-label{display:none}
 }
 
+/* ============ reader controls ============ */
+.rtools{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:22px;
+  padding:12px 0;border-block:1px solid var(--rule-2)}
+.rtools .lab{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink-4);margin-inline-end:2px}
+.tbtn{background:none;border:1px solid var(--rule);border-radius:5px;padding:6px 11px;font-size:12.5px;
+  cursor:pointer;color:var(--ink-3);transition:.16s;line-height:1.2}
+.tbtn:hover{border-color:var(--ink-4);color:var(--ink)}
+.tbtn.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.rtools .sp{display:none}
+.rtools .grp{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+@media (min-width:640px){
+  .rtools .sp{display:block;flex:1}
+}
+@media (max-width:639px){
+  .rtools{gap:10px 8px;flex-direction:column;align-items:stretch}
+  .rtools .grp{justify-content:flex-start}
+  .tbtn{flex:0 0 auto}
+}
+
+/* reading size steps */
+.reader[data-size="s"] .body-en{font-size:15.5px}
+.reader[data-size="s"] .body-ar{font-size:19px}
+.reader[data-size="l"] .body-en{font-size:19px;line-height:1.8}
+.reader[data-size="l"] .body-ar{font-size:24px;line-height:2.2}
+.reader[data-size="xl"] .body-en{font-size:21.5px;line-height:1.85}
+.reader[data-size="xl"] .body-ar{font-size:27px;line-height:2.25}
+
+/* view modes on desktop */
+.reader[data-view="en"] .pages,.reader[data-view="ar"] .pages{grid-template-columns:1fr}
+.reader[data-view="en"] #pgAr,.reader[data-view="ar"] #pgEn{display:none}
+.reader[data-view="en"] #pgEn,.reader[data-view="ar"] #pgAr{padding:0;border-inline-end:0;max-width:72ch;margin-inline:auto}
+
+/* paragraph pairing */
+.body-en p,.body-ar p{position:relative;transition:background .2s}
+.body-en p[data-p]:hover,.body-ar p[data-p]:hover,
+.body-en p.pair,.body-ar p.pair{background:var(--gold-wash)}
+.body-en p[data-p]::before{content:attr(data-p);position:absolute;inset-inline-start:-34px;top:.35em;
+  font-family:var(--mono);font-size:9.5px;color:var(--ink-4);opacity:0;transition:opacity .2s}
+.body-en p[data-p]:hover::before{opacity:1}
+@media (max-width:1100px){.body-en p[data-p]::before{display:none}}
+
+/* glossary term chips inside the text */
+.gl{background:none;border:0;padding:0;font:inherit;color:inherit;cursor:help;
+  border-bottom:1px dashed color-mix(in srgb,var(--gold) 60%,transparent);
+  text-underline-offset:3px}
+.gl:hover{background:var(--gold-wash)}
+.glpop{position:fixed;z-index:120;max-width:330px;background:var(--surface);
+  border:1px solid var(--rule);border-radius:8px;padding:14px 16px;
+  box-shadow:0 2px 4px rgba(0,0,0,.06),0 14px 40px -16px rgba(0,0,0,.3)}
+.glpop .ar{font-family:var(--ar);direction:rtl;text-align:right;font-size:21px;margin:0 0 2px;line-height:1.5}
+.glpop .tr{font-family:var(--display);font-style:italic;font-size:13.5px;color:var(--ink-4);margin:0 0 8px}
+.glpop .en{font-family:var(--display);font-size:18px;margin:0 0 6px}
+.glpop .nt{font-size:13.5px;color:var(--ink-3);margin:0;line-height:1.55}
+.glpop .fld{font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--gold);margin-top:9px;display:block}
+
+/* ============ print ============ */
+@media print{
+  .hdr,.foot,.rtools,.pane-toggle,.back,.glpop{display:none!important}
+  body{background:#fff;color:#000;font-size:11pt;background-image:none}
+  .wrap{max-width:none;padding:0}
+  .pages{grid-template-columns:1fr 1fr;gap:18pt}
+  .page{padding:0}
+  .page:first-child{border-inline-end:1px solid #ccc;padding-inline-end:18pt}
+  .body-en{font-size:10.5pt;line-height:1.5;color:#000}
+  .body-ar{font-size:13pt;line-height:1.9;color:#000}
+  .flag{break-inside:avoid;border:1px solid #ccc;background:none}
+  .notice{border:1px solid #999;background:none}
+  h1{font-size:20pt}
+  a[href]::after{content:" (" attr(href) ")";font-size:8pt;color:#555}
+  .gl{border-bottom:0}
+}
+
 /* ============ flags ============ */
 .flags{margin-top:40px;padding-top:26px;border-top:1px solid var(--rule)}
 .flag{border:1px solid var(--rule);border-radius:7px;padding:16px 18px;margin-bottom:11px;background:var(--surface)}
@@ -389,6 +471,68 @@ function n(x){return (x==null?0:x).toLocaleString("en-US")}
 function paras(t){if(!t)return "";return String(t).split(/\n{2,}/).map(function(p){return p.trim()}).filter(Boolean).map(function(p){return "<p>"+esc(p)+"</p>"}).join("")}
 function get(p){return fetch(p).then(function(r){if(!r.ok)throw new Error(p);return r.json()})}
 function S_(){return D.stats||ST}
+
+/* ---------- reader preferences ---------- */
+var PREF={size:"m",view:(window.innerWidth<920?"en":"both")};
+try{var pj=localStorage.getItem("dedew-read");if(pj)PREF=JSON.parse(pj)}catch(e){}
+function savePref(){try{localStorage.setItem("dedew-read",JSON.stringify(PREF))}catch(e){}}
+
+/* ---------- paragraph numbering, so the two columns can be paired ---------- */
+function parasNum(t,side){
+  if(!t)return "";
+  var i=0;
+  return String(t).split(/\n{2,}/).map(function(p){return p.trim()}).filter(Boolean)
+    .map(function(p){i++;return '<p data-p="'+i+'" data-side="'+side+'">'+esc(p)+'</p>'}).join("");
+}
+
+/* ---------- glossary linking ----------
+   Marks the bracketed transliterations the house style puts in the English
+   (e.g. "disliked (makruh)") so a reader can tap the term for its fixed rendering. */
+var GLRE=null, GLMAP=null;
+function buildGlossaryIndex(){
+  if(GLRE||!D.gloss)return;
+  GLMAP={};
+  var keys=[];
+  D.gloss.terms.forEach(function(t){
+    if(!t.tr)return;
+    GLMAP[t.tr.toLowerCase()]=t;
+    keys.push(t.tr.replace(/[.*+?^${}()|[\]\\]/g,"\\$&"));
+  });
+  keys.sort(function(a,b){return b.length-a.length});
+  GLRE=new RegExp("(^|[\\s(\\[—–/])("+keys.join("|")+")(?=[\\s).,;:\\]—–/]|$)","gi");
+}
+function linkGlossary(html){
+  buildGlossaryIndex();
+  if(!GLRE)return html;
+  return html.replace(GLRE,function(m,pre,word){
+    var t=GLMAP[word.toLowerCase()];
+    if(!t)return m;
+    return pre+'<button class="gl" data-t="'+esc(word.toLowerCase())+'">'+word+'</button>';
+  });
+}
+function closePop(){var p=document.querySelector(".glpop");if(p)p.remove()}
+function openPop(btn){
+  closePop();
+  var t=GLMAP&&GLMAP[btn.dataset.t]; if(!t)return;
+  var el=document.createElement("div");
+  el.className="glpop";
+  el.innerHTML='<p class="ar">'+esc(t.ar)+'</p><p class="tr">'+esc(t.tr)+'</p>'
+    +'<p class="en">'+esc(t.en)+'</p>'
+    +(t.note?'<p class="nt">'+esc(t.note)+'</p>':"")
+    +'<span class="fld">'+esc(t.field||"")+'</span>';
+  document.body.appendChild(el);
+  var r=btn.getBoundingClientRect(), w=el.offsetWidth, h=el.offsetHeight;
+  var left=Math.min(Math.max(12,r.left),window.innerWidth-w-12);
+  var top=r.bottom+9;
+  if(top+h>window.innerHeight-12)top=Math.max(12,r.top-h-9);
+  el.style.left=left+"px"; el.style.top=top+"px";
+}
+document.addEventListener("click",function(e){
+  var b=e.target.closest(".gl");
+  if(b){e.stopPropagation();openPop(b);return}
+  if(!e.target.closest(".glpop"))closePop();
+});
+window.addEventListener("scroll",closePop,{passive:true});
 
 /* ---------- gate ---------- */
 var GATE="avb";
@@ -576,31 +720,69 @@ function textRender(id){
           +(o?'<ul class="flag-opts">'+o+'</ul>':"")
           +(f.note?'<p class="flag-note">'+esc(f.note)+'</p>':"")+'</div>'}).join("")+'</div>';
   }
+  var tools='<div class="rtools">'
+    +'<div class="grp"><span class="lab">Text</span>'
+    +['s','m','l','xl'].map(function(z){return '<button class="tbtn'+(PREF.size===z?" on":"")+'" data-size="'+z+'">'+z.toUpperCase()+'</button>'}).join("")
+    +'</div><span class="sp"></span>'
+    +'<div class="grp"><span class="lab">Show</span>'
+    +'<button class="tbtn'+(PREF.view==="both"?" on":"")+'" data-view="both">Both</button>'
+    +'<button class="tbtn'+(PREF.view==="en"?" on":"")+'" data-view="en">English</button>'
+    +'<button class="tbtn'+(PREF.view==="ar"?" on":"")+'" data-view="ar">العربية</button>'
+    +'<button class="tbtn" id="printBtn" title="Print or save as PDF">Print</button>'
+    +'</div></div>';
+
   box.innerHTML='<button class="back" id="back">← All written works</button>'+notice
     +'<h1 class="r r1">'+esc(a.title_en||"Untitled")+'</h1>'
     +'<p class="reader-ar-title r r1">'+esc(a.title_ar||"")+'</p>'
     +'<div class="reader-meta r r2">'+badges+'</div>'
-    +'<div class="pane-toggle chips"><button class="chip'+(S.pane==="en"?" on":"")+'" data-p="en">English</button><button class="chip'+(S.pane==="ar"?" on":"")+'" data-p="ar">العربية</button></div>'
+    +tools
     +'<div class="pages r r3">'
-      +'<div class="page'+(S.pane==="ar"?" hide":"")+'" id="pgEn"><p class="page-label">English — draft</p><div class="body-en">'+paras(a.body_en)+'</div></div>'
-      +'<div class="page'+(S.pane==="en"?" hide":"")+'" id="pgAr"><p class="page-label">العربية — الأصل</p><div class="body-ar">'+paras(a.body_ar)+'</div></div>'
+      +'<div class="page" id="pgEn"><p class="page-label">English — draft</p><div class="body-en">'+linkGlossary(parasNum(a.body_en,"en"))+'</div></div>'
+      +'<div class="page" id="pgAr"><p class="page-label">العربية — الأصل</p><div class="body-ar">'+parasNum(a.body_ar,"ar")+'</div></div>'
     +'</div>'+fh
     +'<p style="margin-top:32px"><a href="'+esc(a.source_url||"#")+'" target="_blank" rel="noopener" style="font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--gold)">View the original on dedewnet.com ↗</a></p>';
   document.getElementById("back").addEventListener("click",function(){location.hash="#/library"});
-  var pt=box.querySelector(".pane-toggle");
-  pt.addEventListener("click",function(e){
-    var b=e.target.closest(".chip"); if(!b)return;
-    S.pane=b.dataset.p;
-    pt.querySelectorAll(".chip").forEach(function(x){x.classList.toggle("on",x===b)});
-    document.getElementById("pgEn").classList.toggle("hide",S.pane==="ar");
-    document.getElementById("pgAr").classList.toggle("hide",S.pane==="en");
+
+  /* reader preferences */
+  var readerEl=box.closest(".reader");
+  function applyPref(){
+    readerEl.dataset.size=PREF.size;
+    readerEl.dataset.view=PREF.view;
+  }
+  applyPref();
+  box.querySelector(".rtools").addEventListener("click",function(e){
+    var b=e.target.closest(".tbtn"); if(!b)return;
+    if(b.id==="printBtn"){window.print();return}
+    if(b.dataset.size){
+      PREF.size=b.dataset.size;
+      this.querySelectorAll("[data-size]").forEach(function(x){x.classList.toggle("on",x===b)});
+    }
+    if(b.dataset.view){
+      PREF.view=b.dataset.view;
+      this.querySelectorAll("[data-view]").forEach(function(x){x.classList.toggle("on",x===b)});
+    }
+    savePref(); applyPref();
   });
+
+  /* pair the two columns: touching a paragraph highlights its counterpart */
+  box.querySelectorAll("[data-p]").forEach(function(p){
+    function mark(on){
+      var n=p.dataset.p;
+      box.querySelectorAll('[data-p="'+n+'"]').forEach(function(x){x.classList.toggle("pair",on)});
+    }
+    p.addEventListener("mouseenter",function(){mark(true)});
+    p.addEventListener("mouseleave",function(){mark(false)});
+  });
+
   window.scrollTo(0,0);
 }
 
 function textBind(id){
-  if(D.full)return textRender(id);
-  get("data/articles-full.json").then(function(j){D.full=j;textRender(id)})
+  var need=[];
+  if(!D.full)need.push(get("data/articles-full.json").then(function(j){D.full=j}));
+  if(!D.gloss)need.push(get("data/glossary.json").then(function(j){D.gloss=j}).catch(function(){}));
+  if(!need.length)return textRender(id);
+  Promise.all(need).then(function(){textRender(id)})
    .catch(function(){document.getElementById("readerBox").innerHTML='<p class="empty">The text could not be loaded.</p>'});
 }
 
