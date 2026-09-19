@@ -10,230 +10,338 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,300;1,6..72,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200;0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,300;1,6..72,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap">
 
 <style>
 :root{
-  --paper:#EDEEF1; --surface:#F6F7F8; --surface-2:#E3E6EA;
-  --ink:#14171C; --ink-soft:#4C5563; --ink-faint:#79828F;
-  --rule:#D0D5DC; --rule-soft:#DFE3E8;
-  --accent:#8A6425; --accent-soft:#F0E7D6;
-  --teal:#1C665E; --teal-soft:#DDEBE8;
-  --warn:#8C3A1E; --warn-soft:#F6E3DB;
+  --paper:#EAEAE4; --paper-2:#F3F3EE; --surface:#F7F7F3; --surface-2:#DEDED6;
+  --ink:#16181A; --ink-2:#3C4348; --ink-3:#6E767E; --ink-4:#9AA1A8;
+  --rule:#CFCFC6; --rule-2:#E0E0D8;
+  --gold:#8A6A2B; --gold-2:#B8935A; --gold-wash:#EFE7D6;
+  --teal:#17594F; --teal-wash:#DCE9E5;
+  --rust:#8A3A20; --rust-wash:#F3DFD7;
   --display:"Newsreader",Georgia,"Times New Roman",serif;
-  --body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
   --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
-  --arabic:"Amiri","Scheherazade New",Times,serif;
-  --maxw:1180px;
+  --ar:"Amiri","Scheherazade New",Times,serif;
+  --maxw:1240px;
+  --ease:cubic-bezier(.22,.61,.36,1);
 }
 @media (prefers-color-scheme:dark){
   :root:not([data-theme="light"]){
-    --paper:#0F1216; --surface:#161A20; --surface-2:#1E242B;
-    --ink:#E7EAEE; --ink-soft:#A8B2BE; --ink-faint:#78828F;
-    --rule:#2A313A; --rule-soft:#222831;
-    --accent:#C9A063; --accent-soft:#2A2218;
-    --teal:#5FB5A8; --teal-soft:#162927;
-    --warn:#D9906A; --warn-soft:#2C1C15;
+    --paper:#0D0F11; --paper-2:#121517; --surface:#15191C; --surface-2:#1D2327;
+    --ink:#E9EBEC; --ink-2:#B5BDC4; --ink-3:#848D95; --ink-4:#5D666E;
+    --rule:#262D33; --rule-2:#1C2227;
+    --gold:#C9A365; --gold-2:#9C7F4A; --gold-wash:#241D12;
+    --teal:#5FB3A4; --teal-wash:#122623;
+    --rust:#C9795A; --rust-wash:#2A1811;
   }
 }
 :root[data-theme="dark"]{
-  --paper:#0F1216; --surface:#161A20; --surface-2:#1E242B;
-  --ink:#E7EAEE; --ink-soft:#A8B2BE; --ink-faint:#78828F;
-  --rule:#2A313A; --rule-soft:#222831;
-  --accent:#C9A063; --accent-soft:#2A2218;
-  --teal:#5FB5A8; --teal-soft:#162927;
-  --warn:#D9906A; --warn-soft:#2C1C15;
+  --paper:#0D0F11; --paper-2:#121517; --surface:#15191C; --surface-2:#1D2327;
+  --ink:#E9EBEC; --ink-2:#B5BDC4; --ink-3:#848D95; --ink-4:#5D666E;
+  --rule:#262D33; --rule-2:#1C2227;
+  --gold:#C9A365; --gold-2:#9C7F4A; --gold-wash:#241D12;
+  --teal:#5FB3A4; --teal-wash:#122623;
+  --rust:#C9795A; --rust-wash:#2A1811;
 }
+
 *{box-sizing:border-box}
-body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
-a{color:inherit} button{font:inherit;color:inherit}
-:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:2px}
-@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
-.wrap{max-width:var(--maxw);margin:0 auto;padding-inline:20px}
-
-/* gate */
-.gate{position:fixed;inset:0;z-index:200;background:var(--paper);display:grid;place-items:center;padding:24px}
-.gate-box{max-width:430px;width:100%}
-.gate h2{margin:0 0 10px}
-.gate p{color:var(--ink-soft);font-size:14.5px;margin:0 0 18px}
-.gate form{display:flex;gap:8px;flex-wrap:wrap}
-.gate input{flex:1 1 180px;min-width:0;height:44px;padding:0 14px;border:1px solid var(--rule);border-radius:6px;background:var(--surface);color:var(--ink);font:inherit}
-.gate button{height:44px;padding:0 20px;border:1px solid var(--ink);background:var(--ink);color:var(--paper);border-radius:6px;cursor:pointer}
-.gate .err{color:var(--warn);font-size:13px;margin-top:10px;min-height:18px}
-
-/* header */
-.hdr{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:color-mix(in srgb,var(--paper) 88%,transparent);backdrop-filter:saturate(1.4) blur(10px);border-bottom:1px solid var(--rule)}
-.hdr-in{display:flex;align-items:center;gap:18px;height:62px}
-.brand{display:flex;align-items:baseline;gap:10px;text-decoration:none;margin-inline-end:auto;min-width:0}
-.brand-ar{font-family:var(--arabic);font-size:22px;line-height:1;white-space:nowrap}
-.brand-en{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint);white-space:nowrap}
-.nav{display:flex;gap:2px;align-items:center}
-.nav a{text-decoration:none;font-size:13.5px;padding:7px 11px;border-radius:4px;color:var(--ink-soft)}
-.nav a:hover,.nav a.on{background:var(--surface-2);color:var(--ink)}
-.icons{display:flex;gap:4px;align-items:center}
-.iconbtn{background:none;border:1px solid transparent;width:34px;height:34px;border-radius:5px;display:grid;place-items:center;cursor:pointer;color:var(--ink-soft)}
-.iconbtn:hover{border-color:var(--rule);color:var(--ink)}
-.burger{display:none}
-@media (max-width:900px){
-  .nav{display:none;position:fixed;inset:0;z-index:60;flex-direction:column;justify-content:center;gap:6px;background:var(--paper);padding:24px}
-  .nav.open{display:flex}
-  .nav a{font-size:22px;font-family:var(--display);padding:13px 16px;text-align:center}
-  .burger{display:grid}
-  .nav-close{position:absolute;top:calc(14px + env(safe-area-inset-top,0px));inset-inline-end:14px}
-}
-
-h1,h2,h3{font-family:var(--display);font-weight:400;text-wrap:balance;margin:0}
-h1{font-size:clamp(29px,5vw,50px);line-height:1.08;letter-spacing:-.015em}
-h2{font-size:clamp(21px,3vw,30px);line-height:1.18}
-h3{font-size:18px;line-height:1.3}
-.lede{font-size:clamp(15.5px,2vw,18px);color:var(--ink-soft);max-width:62ch}
-.eyebrow{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin:0}
-.ar{font-family:var(--arabic);direction:rtl;text-align:right;line-height:1.95}
-
-.hero{padding-block:clamp(34px,6vw,70px) clamp(26px,4vw,42px);border-bottom:1px solid var(--rule)}
-.hero-ar{font-family:var(--arabic);direction:rtl;font-size:clamp(25px,5.5vw,44px);line-height:1.5;margin:0 0 8px}
-.hero h1{margin-bottom:14px} .hero .lede{margin-bottom:26px}
-.statrow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule);border-radius:6px;overflow:hidden}
-@media (max-width:700px){.statrow{grid-template-columns:repeat(2,minmax(0,1fr))}}
-.stat{background:var(--surface);padding:14px 16px}
-.stat b{display:block;font-family:var(--display);font-size:25px;line-height:1.1;font-variant-numeric:tabular-nums}
-.stat span{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint)}
-
-.sec{padding-block:clamp(28px,5vw,52px)}
-.sec-head{margin-bottom:22px}
-.sec-head p{margin:6px 0 0;color:var(--ink-soft);max-width:62ch}
-
-.entries{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
-.entry{display:block;text-decoration:none;background:var(--surface);border:1px solid var(--rule);border-radius:7px;padding:20px;transition:border-color .15s,transform .15s}
-.entry:hover{border-color:var(--accent);transform:translateY(-2px)}
-.entry h3{margin-bottom:6px} .entry p{margin:0;font-size:14px;color:var(--ink-soft)}
-.entry .n{font-family:var(--mono);font-size:11px;color:var(--accent);letter-spacing:.08em}
-
-.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:18px}
-.search{flex:1 1 230px;min-width:0;display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--rule);border-radius:6px;padding:0 12px;height:42px}
-.search input{flex:1;min-width:0;background:none;border:0;outline:0;font:inherit;font-size:14px;color:var(--ink)}
-.chips{display:flex;gap:6px;flex-wrap:wrap}
-.chip{background:var(--surface);border:1px solid var(--rule);border-radius:100px;padding:7px 14px;font-size:12.5px;cursor:pointer;color:var(--ink-soft);white-space:nowrap}
-.chip:hover{border-color:var(--ink-faint)}
-.chip.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
-
-.rows{border-top:1px solid var(--rule)}
-.row{display:grid;grid-template-columns:82px 1fr auto;gap:16px;align-items:start;padding:15px 8px;border-bottom:1px solid var(--rule-soft);cursor:pointer;background:none;border-left:0;border-right:0;border-top:0;width:100%;text-align:start;font:inherit}
-.row:hover{background:var(--surface)}
-.row-kind{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);padding-top:4px}
-.row-main{min-width:0}
-.row-title{font-family:var(--display);font-size:17.5px;line-height:1.3;margin:0 0 3px;color:var(--ink)}
-.row-ar{font-family:var(--arabic);direction:rtl;text-align:right;font-size:16px;color:var(--ink-soft);margin:2px 0 0;line-height:1.7}
-.row-meta{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin-top:7px}
-.row-side{font-family:var(--mono);font-size:11px;color:var(--ink-faint);text-align:end;padding-top:5px;white-space:nowrap;font-variant-numeric:tabular-nums}
-@media (max-width:660px){
-  .row{grid-template-columns:1fr;gap:5px;padding:14px 4px}
-  .row-side,.row-kind{text-align:start;padding-top:0}
-}
-
-.badge{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border-radius:3px;border:1px solid var(--rule);color:var(--ink-faint);background:var(--surface);white-space:nowrap}
-.badge.draft{color:var(--accent);border-color:color-mix(in srgb,var(--accent) 40%,transparent);background:var(--accent-soft)}
-.badge.flagged{color:var(--warn);border-color:color-mix(in srgb,var(--warn) 40%,transparent);background:var(--warn-soft)}
-.badge.ok{color:var(--teal);border-color:color-mix(in srgb,var(--teal) 40%,transparent);background:var(--teal-soft)}
-.badge.soon{color:var(--ink-faint);border-style:dashed}
-
-.notice{border:1px solid var(--rule);border-inline-start:3px solid var(--accent);background:var(--surface);border-radius:0 6px 6px 0;padding:14px 16px;margin:0 0 20px;font-size:14px;color:var(--ink-soft)}
-.notice.warn{border-inline-start-color:var(--warn)}
-.notice strong{color:var(--ink);font-weight:600}
-
-.reader{padding-block:24px}
-.back{background:none;border:0;cursor:pointer;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);padding:6px 0;margin-bottom:12px}
-.back:hover{color:var(--accent)}
-.reader h1{font-size:clamp(23px,3.6vw,36px);margin-bottom:8px}
-.reader-ar-title{font-family:var(--arabic);direction:rtl;text-align:right;font-size:clamp(19px,3vw,26px);color:var(--ink-soft);line-height:1.7;margin:0 0 14px}
-.reader-meta{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:20px;padding-bottom:18px;border-bottom:1px solid var(--rule)}
-.pane-toggle{display:none;gap:6px;margin-bottom:16px}
-.pages{display:grid;grid-template-columns:1fr 1fr;gap:0}
-.page{padding:0 26px;min-width:0}
-.page:first-child{padding-inline-start:0;border-inline-end:1px solid var(--rule)}
-.page:last-child{padding-inline-end:0}
-.page-label{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint);margin:0 0 12px;padding-bottom:8px;border-bottom:1px solid var(--rule-soft)}
-.body-en{font-size:16.5px;line-height:1.72} .body-en p{margin:0 0 1.05em}
-.body-ar{font-family:var(--arabic);direction:rtl;text-align:right;font-size:20px;line-height:2.05} .body-ar p{margin:0 0 1em}
-@media (max-width:920px){
-  .pages{grid-template-columns:1fr}
-  .page{padding:0} .page:first-child{border-inline-end:0}
-  .page.hide{display:none}
-  .pane-toggle{display:flex} .page-label{display:none}
-}
-
-.flags{margin-top:32px;padding-top:22px;border-top:1px solid var(--rule)}
-.flag{background:var(--surface);border:1px solid var(--rule);border-radius:6px;padding:14px 16px;margin-bottom:10px}
-.flag-ar{font-family:var(--arabic);direction:rtl;text-align:right;font-size:18px;margin:0 0 6px}
-.flag-opts{list-style:none;margin:8px 0 0;padding:0;display:flex;flex-direction:column;gap:5px}
-.flag-opts li{font-size:14px;padding-inline-start:24px;position:relative}
-.flag-opts li::before{content:attr(data-n);position:absolute;inset-inline-start:0;font-family:var(--mono);font-size:10.5px;color:var(--ink-faint);top:3px}
-.flag-opts li.rec::after{content:"recommended";font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--teal);margin-inline-start:8px}
-.flag-note{font-size:13.5px;color:var(--ink-soft);margin:9px 0 0}
-
-.catgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(225px,1fr));gap:12px}
-.cat{background:var(--surface);border:1px solid var(--rule);border-radius:7px;padding:15px 16px;cursor:pointer;text-align:start;transition:border-color .15s;display:flex;flex-direction:column;gap:3px;min-height:104px}
-.cat:hover{border-color:var(--accent)}
-.cat-en{font-family:var(--display);font-size:16.5px;line-height:1.25}
-.cat-ar{font-family:var(--arabic);direction:rtl;text-align:right;font-size:15.5px;color:var(--ink-soft);line-height:1.6}
-.cat-n{font-family:var(--mono);font-size:10.5px;color:var(--ink-faint);letter-spacing:.08em;margin-top:auto;padding-top:8px}
-
-.gloss{border-top:1px solid var(--rule)}
-.term{display:grid;grid-template-columns:150px 1fr;gap:18px;padding:14px 6px;border-bottom:1px solid var(--rule-soft);align-items:start}
-.term-ar{font-family:var(--arabic);direction:rtl;text-align:right;font-size:20px;line-height:1.5;margin:0}
-.term-tr{font-family:var(--display);font-style:italic;font-size:13.5px;color:var(--ink-faint);display:block;text-align:right}
-.term-en{font-family:var(--display);font-size:17.5px;margin:0 0 3px}
-.term-note{font-size:13.5px;color:var(--ink-soft);margin:0}
-.term-field{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent)}
-@media (max-width:660px){
-  .term{grid-template-columns:1fr;gap:4px}
-  .term-ar{text-align:start} .term-tr{text-align:start}
-}
-
-.prose{max-width:66ch}
-.prose p{margin:0 0 1.05em;color:var(--ink-soft)}
-.prose h3{margin:26px 0 8px;color:var(--ink)}
-.prose ul{margin:0 0 1.05em;padding-inline-start:20px;color:var(--ink-soft)}
-.prose li{margin-bottom:6px}
-.prose strong{color:var(--ink);font-weight:600}
-
-.empty,.loading{padding:38px 0;color:var(--ink-faint);font-size:14px}
-.loading{font-family:var(--mono)}
-.more{margin:22px auto 0;display:block;background:var(--surface);border:1px solid var(--rule);border-radius:6px;padding:11px 26px;cursor:pointer;font-size:13.5px}
-.more:hover{border-color:var(--accent)}
-.foot{border-top:1px solid var(--rule);padding-block:28px 44px;margin-top:38px;font-size:13px;color:var(--ink-faint)}
-.foot a{color:var(--accent)}
-
-/* --- standalone build fixes (the artifact wrapper normally supplies these) --- */
 [hidden]{display:none!important}
 html{-webkit-text-size-adjust:100%}
 img{max-width:100%}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:var(--sans);font-size:16.5px;line-height:1.62;
+  -webkit-font-smoothing:antialiased;
+  background-image:radial-gradient(circle at 1px 1px, color-mix(in srgb,var(--ink) 4%,transparent) 1px, transparent 0);
+  background-size:22px 22px;
+}
+a{color:inherit}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px;border-radius:2px}
+.wrap{max-width:var(--maxw);margin:0 auto;padding-inline:22px}
+@media (max-width:520px){.wrap{padding-inline:17px}}
 
-/* --- gate: mobile --- */
+/* ============ motion ============ */
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.r{animation:rise .7s var(--ease) both}
+.r1{animation-delay:.04s}.r2{animation-delay:.10s}.r3{animation-delay:.17s}
+.r4{animation-delay:.24s}.r5{animation-delay:.31s}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+  .r{opacity:1!important;transform:none!important}
+}
+
+/* ============ gate ============ */
 .gate{
+  position:fixed;inset:0;z-index:200;background:var(--paper);
+  display:grid;place-items:center;overflow:hidden;
   padding:clamp(20px,6vw,32px);
   padding-top:calc(clamp(20px,6vw,32px) + env(safe-area-inset-top,0px));
   padding-bottom:calc(clamp(20px,6vw,32px) + env(safe-area-inset-bottom,0px));
 }
-.gate-box{max-width:430px;width:100%}
-.gate h2{font-size:clamp(25px,7vw,34px);margin-bottom:12px}
-.gate p{font-size:15px}
-.gate form{flex-direction:column;gap:10px}
-.gate input,.gate button{width:100%;height:48px;font-size:16px}
-@media (min-width:430px){
+.gate-star{position:absolute;inset:auto;width:min(120vw,900px);opacity:.055;pointer-events:none;
+  color:var(--ink);animation:fade 1.6s var(--ease) both}
+.gate-box{max-width:440px;width:100%;position:relative;z-index:1}
+.gate .eyebrow{margin-bottom:14px}
+.gate h2{font-size:clamp(30px,8vw,44px);font-weight:300;letter-spacing:-.02em;margin:0 0 12px}
+.gate p{color:var(--ink-2);font-size:15.5px;margin:0 0 22px;max-width:40ch}
+.gate form{display:flex;gap:10px;flex-direction:column}
+.gate input,.gate button{width:100%;height:50px;font-size:16px;border-radius:7px}
+.gate input{padding:0 15px;border:1px solid var(--rule);background:var(--surface);color:var(--ink);font-family:inherit}
+.gate input:focus{border-color:var(--gold);outline:none}
+.gate button{border:1px solid var(--ink);background:var(--ink);color:var(--paper);cursor:pointer;
+  letter-spacing:.04em;transition:opacity .2s}
+.gate button:hover{opacity:.85}
+.gate .err{color:var(--rust);font-size:13.5px;margin:12px 0 0;min-height:19px}
+@media (min-width:440px){
   .gate form{flex-direction:row}
   .gate input{flex:1 1 auto;width:auto}
-  .gate button{width:auto;flex:0 0 auto}
+  .gate button{width:auto;flex:0 0 auto;padding-inline:30px}
 }
 
+/* ============ header ============ */
+.hdr{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--paper) 90%,transparent);
+  backdrop-filter:saturate(1.5) blur(14px);border-bottom:1px solid var(--rule)}
+.hdr-in{display:flex;align-items:center;gap:20px;height:66px}
+.brand{display:flex;align-items:baseline;gap:11px;text-decoration:none;margin-inline-end:auto;min-width:0}
+.brand-ar{font-family:var(--ar);font-size:23px;line-height:1;white-space:nowrap}
+.brand-en{font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-4);white-space:nowrap}
+@media (max-width:420px){.brand-en{display:none}}
+.nav{display:flex;gap:1px;align-items:center}
+.nav a{text-decoration:none;font-size:13.5px;padding:8px 12px;border-radius:5px;color:var(--ink-2);
+  position:relative;transition:color .18s}
+.nav a:hover{color:var(--ink)}
+.nav a.on{color:var(--ink)}
+.nav a.on::after{content:"";position:absolute;left:12px;right:12px;bottom:2px;height:1.5px;background:var(--gold)}
+.icons{display:flex;gap:5px;align-items:center}
+.iconbtn{background:none;border:1px solid transparent;width:36px;height:36px;border-radius:6px;
+  display:grid;place-items:center;cursor:pointer;color:var(--ink-3);transition:.18s}
+.iconbtn:hover{border-color:var(--rule);color:var(--ink)}
+.burger{display:none}
+@media (max-width:940px){
+  .nav{display:none;position:fixed;inset:0;z-index:60;flex-direction:column;justify-content:center;
+    gap:2px;background:var(--paper);padding:28px}
+  .nav.open{display:flex}
+  .nav a{font-size:clamp(26px,7vw,34px);font-family:var(--display);font-weight:300;
+    padding:14px 18px;text-align:center;animation:rise .5s var(--ease) both}
+  .nav.open a:nth-child(2){animation-delay:.04s}
+  .nav.open a:nth-child(3){animation-delay:.08s}
+  .nav.open a:nth-child(4){animation-delay:.12s}
+  .nav.open a:nth-child(5){animation-delay:.16s}
+  .nav.open a:nth-child(6){animation-delay:.20s}
+  .nav.open a:nth-child(7){animation-delay:.24s}
+  .nav a.on::after{left:50%;right:auto;transform:translateX(-50%);width:26px}
+  .nav-close{position:absolute;top:calc(16px + env(safe-area-inset-top,0px));inset-inline-end:16px}
+  .burger{display:grid}
+}
+
+/* ============ type ============ */
+h1,h2,h3{font-family:var(--display);font-weight:300;text-wrap:balance;margin:0;letter-spacing:-.018em}
+h1{font-size:clamp(33px,6vw,62px);line-height:1.04}
+h2{font-size:clamp(24px,3.6vw,38px);line-height:1.12}
+h3{font-size:19px;line-height:1.28;letter-spacing:-.01em}
+.eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin:0}
+.lede{font-size:clamp(16px,2.1vw,19.5px);color:var(--ink-2);max-width:58ch;font-weight:400}
+
+/* ============ hero ============ */
+.hero{position:relative;overflow:hidden;border-bottom:1px solid var(--rule);
+  padding-block:clamp(44px,8vw,96px) clamp(30px,5vw,54px)}
+.hero-star{position:absolute;top:50%;inset-inline-end:-14%;translate:0 -50%;
+  width:min(70vw,620px);opacity:.07;color:var(--ink);pointer-events:none}
+.hero-in{position:relative;z-index:1}
+.hero-ar{font-family:var(--ar);direction:rtl;font-size:clamp(26px,5.6vw,50px);line-height:1.45;
+  margin:0 0 14px;color:var(--ink-2);font-weight:400}
+.hero h1{margin-bottom:20px;max-width:17ch}
+.hero .lede{margin-bottom:34px}
+
+.statrow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;
+  border-top:1px solid var(--rule)}
+@media (max-width:760px){.statrow{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.stat{padding:18px 20px 16px;border-inline-end:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.stat:last-child{border-inline-end:0}
+@media (max-width:760px){.stat:nth-child(2n){border-inline-end:0}}
+.stat b{display:block;font-family:var(--display);font-size:clamp(28px,4vw,38px);font-weight:300;
+  line-height:1;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.stat span{display:block;margin-top:7px;font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--ink-4)}
+
+/* ============ entries ============ */
+.sec{padding-block:clamp(34px,5.5vw,64px)}
+.sec-head{margin-bottom:26px;max-width:64ch}
+.sec-head h2{margin-top:7px}
+.sec-head p{margin:12px 0 0;color:var(--ink-2)}
+
+.entries{display:grid;grid-template-columns:repeat(auto-fit,minmax(255px,1fr));gap:0;
+  border-top:1px solid var(--rule)}
+.entry{display:block;text-decoration:none;padding:26px 24px 30px;position:relative;
+  border-inline-end:1px solid var(--rule);border-bottom:1px solid var(--rule);
+  transition:background .22s var(--ease)}
+.entry:last-child{border-inline-end:0}
+.entry::before{content:"";position:absolute;inset-inline-start:0;top:0;bottom:-1px;width:2px;
+  background:var(--gold);transform:scaleY(0);transform-origin:top;transition:transform .3s var(--ease)}
+.entry:hover{background:var(--surface)}
+.entry:hover::before{transform:scaleY(1)}
+.entry .n{font-family:var(--mono);font-size:10px;color:var(--gold);letter-spacing:.18em}
+.entry h3{margin:12px 0 8px}
+.entry p{margin:0;font-size:14.5px;color:var(--ink-3);line-height:1.55}
+
+/* ============ controls ============ */
+.controls{display:flex;gap:11px;flex-wrap:wrap;align-items:center;margin-bottom:22px}
+.search{flex:1 1 250px;min-width:0;display:flex;align-items:center;gap:9px;background:var(--surface);
+  border:1px solid var(--rule);border-radius:7px;padding:0 14px;height:46px;transition:border-color .2s}
+.search:focus-within{border-color:var(--gold)}
+.search input{flex:1;min-width:0;background:none;border:0;outline:0;font:inherit;font-size:16px;color:var(--ink)}
+.chips{display:flex;gap:7px;flex-wrap:wrap}
+.chip{background:none;border:1px solid var(--rule);border-radius:100px;padding:8px 15px;font-size:13px;
+  cursor:pointer;color:var(--ink-3);white-space:nowrap;transition:.18s}
+.chip:hover{border-color:var(--ink-4);color:var(--ink)}
+.chip.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+
+/* ============ rows ============ */
+.rows{border-top:1px solid var(--rule)}
+.row{display:grid;grid-template-columns:90px 1fr auto;gap:20px;align-items:start;
+  padding:18px 10px;border-bottom:1px solid var(--rule-2);cursor:pointer;background:none;
+  border-left:0;border-right:0;border-top:0;width:100%;text-align:start;font:inherit;
+  transition:background .18s;position:relative}
+.row:hover{background:var(--surface)}
+.row-kind{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink-4);padding-top:5px}
+.row-main{min-width:0}
+.row-title{font-family:var(--display);font-size:19px;font-weight:400;line-height:1.3;margin:0 0 4px;color:var(--ink);letter-spacing:-.01em}
+.row-ar{font-family:var(--ar);direction:rtl;text-align:right;font-size:16.5px;color:var(--ink-3);margin:3px 0 0;line-height:1.75}
+.row-meta{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin-top:9px}
+.row-side{font-family:var(--mono);font-size:10.5px;color:var(--ink-4);text-align:end;padding-top:6px;
+  white-space:nowrap;font-variant-numeric:tabular-nums}
+@media (max-width:700px){
+  .row{grid-template-columns:1fr;gap:6px;padding:16px 4px}
+  .row-side,.row-kind{text-align:start;padding-top:0}
+  .row-title{font-size:17.5px}
+}
+
+/* ============ badges ============ */
+.badge{display:inline-flex;align-items:center;font-family:var(--mono);font-size:9.5px;letter-spacing:.09em;
+  text-transform:uppercase;padding:4px 9px;border-radius:3px;border:1px solid var(--rule);
+  color:var(--ink-4);background:none;white-space:nowrap}
+.badge.draft{color:var(--gold);border-color:color-mix(in srgb,var(--gold) 38%,transparent);background:var(--gold-wash)}
+.badge.flagged{color:var(--rust);border-color:color-mix(in srgb,var(--rust) 38%,transparent);background:var(--rust-wash)}
+.badge.ok{color:var(--teal);border-color:color-mix(in srgb,var(--teal) 38%,transparent);background:var(--teal-wash)}
+.badge.soon{border-style:dashed}
+
+/* ============ notices ============ */
+.notice{border:1px solid var(--rule);border-inline-start:2px solid var(--gold);background:var(--surface);
+  padding:16px 18px;margin:0 0 22px;font-size:14.5px;color:var(--ink-2);line-height:1.6}
+.notice.warn{border-inline-start-color:var(--rust)}
+.notice strong{color:var(--ink);font-weight:600}
+
+/* ============ reader ============ */
+.reader{padding-block:26px}
+.back{background:none;border:0;cursor:pointer;font-family:var(--mono);font-size:10px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--ink-4);padding:8px 0;margin-bottom:16px;transition:color .18s}
+.back:hover{color:var(--gold)}
+.reader h1{font-size:clamp(26px,4.2vw,44px);margin-bottom:12px;max-width:22ch}
+.reader-ar-title{font-family:var(--ar);direction:rtl;text-align:right;font-size:clamp(20px,3.2vw,28px);
+  color:var(--ink-3);line-height:1.7;margin:0 0 18px}
+.reader-meta{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:26px;padding-bottom:22px;border-bottom:1px solid var(--rule)}
+.pane-toggle{display:none;gap:7px;margin-bottom:20px}
+.pages{display:grid;grid-template-columns:1fr 1fr;gap:0}
+.page{padding:0 34px;min-width:0}
+.page:first-child{padding-inline-start:0;border-inline-end:1px solid var(--rule)}
+.page:last-child{padding-inline-end:0}
+.page-label{font-family:var(--mono);font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--ink-4);margin:0 0 16px;padding-bottom:10px;border-bottom:1px solid var(--rule-2)}
+.body-en{font-size:17px;line-height:1.75;color:var(--ink-2)}
+.body-en p{margin:0 0 1.1em}
+.body-en p:first-of-type::first-letter{font-family:var(--display);font-size:3.1em;line-height:.86;
+  float:inline-start;padding-inline-end:.09em;padding-top:.06em;font-weight:300;color:var(--ink)}
+.body-ar{font-family:var(--ar);direction:rtl;text-align:right;font-size:21px;line-height:2.1;color:var(--ink-2)}
+.body-ar p{margin:0 0 1em}
+@media (max-width:920px){
+  .pages{grid-template-columns:1fr}
+  .page{padding:0}.page:first-child{border-inline-end:0}
+  .page.hide{display:none}
+  .pane-toggle{display:flex}.page-label{display:none}
+}
+
+/* ============ flags ============ */
+.flags{margin-top:40px;padding-top:26px;border-top:1px solid var(--rule)}
+.flag{border:1px solid var(--rule);border-radius:7px;padding:16px 18px;margin-bottom:11px;background:var(--surface)}
+.flag-ar{font-family:var(--ar);direction:rtl;text-align:right;font-size:19px;margin:0 0 8px;line-height:1.8}
+.flag-opts{list-style:none;margin:10px 0 0;padding:0;display:flex;flex-direction:column;gap:6px}
+.flag-opts li{font-size:14.5px;padding-inline-start:26px;position:relative;color:var(--ink-2)}
+.flag-opts li::before{content:attr(data-n);position:absolute;inset-inline-start:0;font-family:var(--mono);
+  font-size:10px;color:var(--ink-4);top:4px}
+.flag-opts li.rec{color:var(--ink)}
+.flag-opts li.rec::after{content:"recommended";font-family:var(--mono);font-size:9px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--teal);margin-inline-start:9px}
+.flag-note{font-size:13.5px;color:var(--ink-3);margin:10px 0 0;line-height:1.6}
+
+/* ============ media ============ */
+.catgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:0;border-top:1px solid var(--rule)}
+.cat{background:none;border:0;border-inline-end:1px solid var(--rule);border-bottom:1px solid var(--rule);
+  padding:20px 22px 22px;cursor:pointer;text-align:start;display:flex;flex-direction:column;gap:5px;
+  min-height:128px;position:relative;transition:background .22s;font:inherit;color:inherit}
+.cat::before{content:"";position:absolute;inset-inline-start:0;top:0;bottom:-1px;width:2px;background:var(--gold);
+  transform:scaleY(0);transform-origin:top;transition:transform .3s var(--ease)}
+.cat:hover{background:var(--surface)}
+.cat:hover::before{transform:scaleY(1)}
+.cat-en{font-family:var(--display);font-size:17.5px;font-weight:400;line-height:1.25;letter-spacing:-.01em}
+.cat-ar{font-family:var(--ar);direction:rtl;text-align:right;font-size:16px;color:var(--ink-3);line-height:1.6}
+.cat-n{font-family:var(--mono);font-size:10px;color:var(--ink-4);letter-spacing:.13em;margin-top:auto;padding-top:10px}
+
+/* ============ glossary ============ */
+.gloss{border-top:1px solid var(--rule)}
+.term{display:grid;grid-template-columns:168px 1fr;gap:22px;padding:17px 6px;
+  border-bottom:1px solid var(--rule-2);align-items:start}
+.term-ar{font-family:var(--ar);direction:rtl;text-align:right;font-size:21px;line-height:1.5;margin:0}
+.term-tr{font-family:var(--display);font-style:italic;font-size:14px;color:var(--ink-4);display:block;text-align:right}
+.term-en{font-family:var(--display);font-size:19px;font-weight:400;margin:0 0 4px}
+.term-note{font-size:14px;color:var(--ink-3);margin:0;line-height:1.55}
+.term-field{font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+@media (max-width:700px){
+  .term{grid-template-columns:1fr;gap:5px}
+  .term-ar,.term-tr{text-align:start}
+}
+
+/* ============ prose ============ */
+.prose{max-width:68ch}
+.prose p{margin:0 0 1.1em;color:var(--ink-2)}
+.prose h3{margin:32px 0 10px;color:var(--ink)}
+.prose ul{margin:0 0 1.1em;padding-inline-start:22px;color:var(--ink-2)}
+.prose li{margin-bottom:7px}
+.prose strong{color:var(--ink);font-weight:600}
+
+.empty,.loading{padding:44px 0;color:var(--ink-4);font-size:14px}
+.loading{font-family:var(--mono);font-size:12px;letter-spacing:.1em}
+.more{margin:26px auto 0;display:block;background:none;border:1px solid var(--rule);border-radius:7px;
+  padding:13px 30px;cursor:pointer;font-size:13.5px;color:var(--ink-2);transition:.2s}
+.more:hover{border-color:var(--gold);color:var(--ink)}
+.foot{border-top:1px solid var(--rule);padding-block:34px 52px;margin-top:44px;font-size:13px;color:var(--ink-4)}
+.foot a{color:var(--gold)}
+.foot p{margin:0 0 7px;max-width:70ch}
 </style>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="star8" viewBox="0 0 200 200">
+    <g fill="none" stroke="currentColor" stroke-width="1">
+      <rect x="28" y="28" width="144" height="144"/>
+      <rect x="28" y="28" width="144" height="144" transform="rotate(45 100 100)"/>
+      <circle cx="100" cy="100" r="72"/><circle cx="100" cy="100" r="50"/>
+      <circle cx="100" cy="100" r="98"/>
+      <path d="M100 2 L100 198 M2 100 L198 100 M31 31 L169 169 M169 31 L31 169"/>
+    </g>
+  </symbol>
+</svg>
+
 <div class="gate" id="gate">
+  <svg class="gate-star" aria-hidden="true"><use href="#star8"/></svg>
   <div class="gate-box">
     <p class="eyebrow">Ummah Collective · private review build</p>
     <h2>Dedew Library</h2>
-    <p>An English edition in preparation, not yet reviewed or approved by the Sheikh's office. This build is private while it is being checked.</p>
+    <p>An English edition in preparation — not yet reviewed or approved by the Sheikh's office. This build stays private while it is being checked.</p>
     <form id="gateForm">
       <input id="gatePw" type="password" placeholder="Access code" autocomplete="off" aria-label="Access code">
       <button type="submit">Enter</button>
@@ -249,8 +357,9 @@ img{max-width:100%}
     <nav class="nav" id="nav">
       <button class="iconbtn nav-close" id="navClose" aria-label="Close menu">✕</button>
       <a href="#/library">Written Works</a>
+      <a href="#/onair">On Air</a>
       <a href="#/media">Lectures</a>
-      <a href="#/review">Held for Review</a>
+      <a href="#/review">Held</a>
       <a href="#/glossary">Glossary</a>
       <a href="#/method">Method</a>
     </nav>
@@ -262,7 +371,7 @@ img{max-width:100%}
 </header>
 <main id="view"></main>
 <footer class="foot"><div class="wrap">
-  <p style="margin:0 0 6px">Every translation here is an unreviewed draft pending approval by the Sheikh's office. The Arabic original is authoritative.</p>
+  <p>Every translation here is an unreviewed draft pending approval by the Sheikh's office. The Arabic original is authoritative in every case.</p>
   <p style="margin:0">Source: <a href="https://dedewnet.com" target="_blank" rel="noopener">dedewnet.com</a> · Built by Ummah Collective</p>
 </div></footer>
 </div>
@@ -270,15 +379,18 @@ img{max-width:100%}
 <script>
 (function(){
 "use strict";
-var D={idx:null,full:null,held:null,cats:null,gloss:null,stats:null};
-var S={libQ:"",libType:"all",libN:40,pane:"en",medQ:"",medType:"all",medN:60};
+var D={idx:null,full:null,held:null,onair:null,cats:null,media:null,gloss:null,stats:null};
+var S={libQ:"",libType:"all",libN:40,pane:"en",medQ:"",medType:"all",medN:60,airQ:"",airN:60};
+var ST={translated:674,texts:222,onair:142,held:310,corpus_written:957,corpus_with_text:555,
+        media:3473,media_cats:99,video:2162,audio:1309,flags:2226,excerpt:164};
 
 function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
 function n(x){return (x==null?0:x).toLocaleString("en-US")}
 function paras(t){if(!t)return "";return String(t).split(/\n{2,}/).map(function(p){return p.trim()}).filter(Boolean).map(function(p){return "<p>"+esc(p)+"</p>"}).join("")}
 function get(p){return fetch(p).then(function(r){if(!r.ok)throw new Error(p);return r.json()})}
+function S_(){return D.stats||ST}
 
-/* gate */
+/* ---------- gate ---------- */
 var GATE="avb";
 function unlock(){
   document.getElementById("gate").hidden=true;
@@ -289,12 +401,11 @@ function unlock(){
 try{if(sessionStorage.getItem("dedew-ok")==="1"){unlock()}}catch(e){}
 document.getElementById("gateForm").addEventListener("submit",function(e){
   e.preventDefault();
-  var v=document.getElementById("gatePw").value.trim().toLowerCase();
-  if(v===GATE){unlock()}
+  if(document.getElementById("gatePw").value.trim().toLowerCase()===GATE){unlock()}
   else{document.getElementById("gateErr").textContent="That code is not recognised."}
 });
 
-/* theme */
+/* ---------- theme ---------- */
 try{var sv=localStorage.getItem("dedew-theme");if(sv)document.documentElement.setAttribute("data-theme",sv)}catch(e){}
 document.getElementById("themeBtn").addEventListener("click",function(){
   var c=document.documentElement.getAttribute("data-theme");
@@ -309,38 +420,54 @@ document.getElementById("burger").addEventListener("click",function(){nav.classL
 document.getElementById("navClose").addEventListener("click",function(){nav.classList.remove("open")});
 nav.addEventListener("click",function(e){if(e.target.tagName==="A")nav.classList.remove("open")});
 
-var ST={translated:674,open:364,held:310,corpus_written:957,corpus_with_text:555,done_total:674,media:3473,media_cats:99,video:2162,audio:1309,flags:2226,excerpt:164,audio_only:157};
+/* ---------- count-up ---------- */
+function countUp(){
+  if(matchMedia("(prefers-reduced-motion:reduce)").matches)return;
+  document.querySelectorAll("[data-count]").forEach(function(el){
+    var target=+el.dataset.count, t0=null, dur=1100;
+    function step(ts){
+      if(!t0)t0=ts;
+      var p=Math.min((ts-t0)/dur,1), e=1-Math.pow(1-p,3);
+      el.textContent=Math.round(target*e).toLocaleString("en-US");
+      if(p<1)requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  });
+}
 
+/* ---------- home ---------- */
 function vHome(){
-  var s=D.stats||ST;
-  return '<section class="hero"><div class="wrap">'
-   +'<p class="hero-ar">الموقع العلمي للشيخ محمد الحسن الددو الشنقيطي</p>'
-   +'<h1>The written works of Sheikh Muhammad al-Hasan Ould al-Dedew, in English</h1>'
-   +'<p class="lede">A bilingual edition of the Mauritanian scholar’s fatwas, sermons, essays and lecture transcripts — each English draft set beside the Arabic it came from, with every uncertain rendering recorded rather than quietly resolved.</p>'
-   +'<div class="statrow">'
-     +'<div class="stat"><b>'+n(s.done_total)+'</b><span>Records translated</span></div>'
-     +'<div class="stat"><b>'+n(s.open)+'</b><span>Readable in this build</span></div>'
-     +'<div class="stat"><b>'+n(s.media)+'</b><span>Recorded lectures</span></div>'
-     +'<div class="stat"><b>'+n(s.flags)+'</b><span>Translator’s notes</span></div>'
+  var s=S_();
+  return '<section class="hero"><svg class="hero-star" aria-hidden="true"><use href="#star8"/></svg>'
+   +'<div class="wrap hero-in">'
+   +'<p class="hero-ar r r1">الموقع العلمي للشيخ محمد الحسن الددو الشنقيطي</p>'
+   +'<h1 class="r r2">The written works of Sheikh Muhammad al-Hasan Ould al-Dedew, in English</h1>'
+   +'<p class="lede r r3">A bilingual edition of the Mauritanian scholar’s fatwas, sermons, essays and lecture transcripts — each English draft set beside the Arabic it came from, and every uncertain rendering recorded rather than quietly resolved.</p>'
+   +'<div class="statrow r r4">'
+     +'<div class="stat"><b data-count="'+(s.translated||674)+'">0</b><span>Records translated</span></div>'
+     +'<div class="stat"><b data-count="'+(s.texts||222)+'">0</b><span>Texts readable</span></div>'
+     +'<div class="stat"><b data-count="'+(s.media||3473)+'">0</b><span>Recorded lectures</span></div>'
+     +'<div class="stat"><b data-count="'+(s.flags||2226)+'">0</b><span>Translator’s notes</span></div>'
    +'</div></div></section>'
-   +'<section class="sec"><div class="wrap"><div class="entries">'
-     +'<a class="entry" href="#/library"><span class="n">01</span><h3>Written Works</h3><p>'+n(s.open)+' texts readable now, English beside the Arabic. Fatwas, Friday sermons, essays and lecture transcripts.</p></a>'
-     +'<a class="entry" href="#/media"><span class="n">02</span><h3>Recorded Lectures</h3><p>'+n(s.media)+' recordings across '+n(s.media_cats)+' categories under English subject headings. The Sheikh speaks in Arabic; title translation is in progress.</p></a>'
-     +'<a class="entry" href="#/review"><span class="n">03</span><h3>Held for Review</h3><p>'+n(s.held)+' texts withheld from the reading list — either flagged for legal review or stopping before the Sheikh gives his ruling.</p></a>'
-     +'<a class="entry" href="#/glossary"><span class="n">04</span><h3>Glossary</h3><p>141 fixed renderings — the terms where a loose translation would change a ruling.</p></a>'
+   +'<section class="sec"><div class="wrap"><div class="entries r r5">'
+     +'<a class="entry" href="#/library"><span class="n">01</span><h3>Written Works</h3><p>'+n(s.texts||222)+' texts with a real written body — English beside the Arabic, with the translator’s open questions kept in view.</p></a>'
+     +'<a class="entry" href="#/onair"><span class="n">02</span><h3>Answered On Air</h3><p>'+n(s.onair||142)+' questions the Sheikh answered aloud. The question is translated; the answer lives only in the recording.</p></a>'
+     +'<a class="entry" href="#/media"><span class="n">03</span><h3>Recorded Lectures</h3><p>'+n(s.media||3473)+' recordings across '+n(s.media_cats||99)+' subjects, every category named in English.</p></a>'
+     +'<a class="entry" href="#/review"><span class="n">04</span><h3>Held for Review</h3><p>'+n(s.held||310)+' texts kept out of the reading list. Their English is not served to this site at all.</p></a>'
    +'</div></div></section>';
 }
 
-var TYPES=[["all","All"],["fatwa","Fatwas"],["khutbah","Sermons"],["transcript","Transcripts"],["article","Essays"],["news","News"],["audio_only","Audio only"]];
+/* ---------- library ---------- */
+var TYPES=[["all","All"],["fatwa","Fatwas"],["khutbah","Sermons"],["transcript","Transcripts"],["article","Essays"],["news","News"]];
 
 function vLibrary(){
   return '<section class="sec"><div class="wrap">'
-   +'<div class="sec-head"><p class="eyebrow">Section one</p><h2>Written Works</h2>'
-   +'<p>Texts readable in this build. Anything flagged for legal review, or that breaks off before the Sheikh states his own position, is held back and listed separately under Held for Review.</p></div>'
-   +'<div class="controls">'
-     +'<label class="search"><span style="color:var(--ink-faint)">⌕</span><input id="libQ" type="search" placeholder="Search titles, English or Arabic…"></label>'
+   +'<div class="sec-head r r1"><p class="eyebrow">Section one</p><h2>Written Works</h2>'
+   +'<p>Texts that carry a real written body. Anything flagged for legal review, or that breaks off before the Sheikh states his own position, is held back and listed under Held.</p></div>'
+   +'<div class="controls r r2">'
+     +'<label class="search"><span style="color:var(--ink-4)">⌕</span><input id="libQ" type="search" placeholder="Search titles, English or Arabic…"></label>'
      +'<div class="chips" id="libChips">'+TYPES.map(function(t){return '<button class="chip'+(S.libType===t[0]?" on":"")+'" data-t="'+t[0]+'">'+t[1]+'</button>'}).join("")+'</div>'
-   +'</div><div id="libRows"><p class="loading">Loading the index…</p></div></div></section>';
+   +'</div><div id="libRows" class="r r3"><p class="loading">Loading the index…</p></div></div></section>';
 }
 
 function libRender(){
@@ -353,13 +480,11 @@ function libRender(){
     return (a.title_en||"").toLowerCase().indexOf(q)>-1||(a.title_ar||"").indexOf(S.libQ.trim())>-1;
   });
   if(!list.length){box.innerHTML='<p class="empty">Nothing matches that search.</p>';return}
-  var shown=list.slice(0,S.libN);
-  var h='<div class="rows">'+shown.map(function(a){
+  var h='<div class="rows">'+list.slice(0,S.libN).map(function(a){
     var b='<span class="badge draft">Draft</span>';
-    if(a.type==="audio_only")b+=' <span class="badge soon">Answer is audio</span>';
-    if(a.excerpt)b+=' <span class="badge">Excerpt only</span>';
-    if(a.cms_date)b+=' <span class="badge">Date unverified</span>';
-    if(a.n_flags)b+=' <span class="badge">'+a.n_flags+' note'+(a.n_flags>1?"s":"")+'</span>';
+    if(a.excerpt)b+='<span class="badge">Excerpt only</span>';
+    if(a.cms_date)b+='<span class="badge">Date unverified</span>';
+    if(a.n_flags)b+='<span class="badge">'+a.n_flags+' note'+(a.n_flags>1?"s":"")+'</span>';
     return '<button class="row" data-id="'+a.id+'">'
       +'<span class="row-kind">'+esc((a.type||"").replace("_"," "))+'</span>'
       +'<span class="row-main"><span class="row-title">'+esc(a.title_en||"Untitled")+'</span>'
@@ -373,12 +498,11 @@ function libRender(){
 }
 
 function libBind(){
-  var q=document.getElementById("libQ");
-  q.value=S.libQ;
+  var q=document.getElementById("libQ"); q.value=S.libQ;
   q.addEventListener("input",function(){S.libQ=q.value;S.libN=40;libRender()});
   document.getElementById("libChips").addEventListener("click",function(e){
     var b=e.target.closest(".chip"); if(!b)return;
-    S.libType=b.dataset.t; S.libN=40;
+    S.libType=b.dataset.t;S.libN=40;
     this.querySelectorAll(".chip").forEach(function(x){x.classList.toggle("on",x===b)});
     libRender();
   });
@@ -387,42 +511,81 @@ function libBind(){
     .catch(function(){document.getElementById("libRows").innerHTML='<p class="empty">The index could not be loaded.</p>'});
 }
 
+/* ---------- on air ---------- */
+function vOnAir(){
+  var s=S_();
+  return '<section class="sec"><div class="wrap">'
+   +'<div class="sec-head r r1"><p class="eyebrow">Section two</p><h2>Answered On Air</h2>'
+   +'<p>'+n(s.onair||142)+' questions put to the Sheikh that he answered aloud. The source publishes the question and a recording — no written answer exists, so none is shown. The question is translated; the answer is in the audio.</p></div>'
+   +'<div class="controls r r2"><label class="search"><span style="color:var(--ink-4)">⌕</span>'
+   +'<input id="airQ" type="search" placeholder="Search questions…"></label></div>'
+   +'<div id="airRows" class="r r3"><p class="loading">Loading…</p></div></div></section>';
+}
+
+function airRender(){
+  var box=document.getElementById("airRows"); if(!box||!D.onair)return;
+  var q=S.airQ.trim().toLowerCase();
+  var list=D.onair.filter(function(a){
+    if(!q)return true;
+    return (a.title_en||"").toLowerCase().indexOf(q)>-1||(a.title_ar||"").indexOf(S.airQ.trim())>-1});
+  if(!list.length){box.innerHTML='<p class="empty">Nothing matches that search.</p>';return}
+  var h='<div class="rows">'+list.slice(0,S.airN).map(function(a){
+    return '<a class="row" style="text-decoration:none" href="'+esc(a.source_url||"#")+'" target="_blank" rel="noopener">'
+      +'<span class="row-kind">Question</span>'
+      +'<span class="row-main"><span class="row-title">'+esc(a.title_en||"Untitled")+'</span>'
+      +'<p class="row-ar">'+esc(a.title_ar||"")+'</p>'
+      +'<span class="row-meta"><span class="badge soon">Answer is audio</span>'
+      +(a.cms_date?'<span class="badge">Date unverified</span>':"")+'</span></span>'
+      +'<span class="row-side">listen ↗</span></a>'}).join("")+'</div>';
+  if(list.length>S.airN)h+='<button class="more" id="airMore">Show more — '+(list.length-S.airN)+' remaining</button>';
+  box.innerHTML=h;
+  var m=document.getElementById("airMore"); if(m)m.addEventListener("click",function(){S.airN+=60;airRender()});
+}
+
+function airBind(){
+  var q=document.getElementById("airQ"); q.value=S.airQ;
+  q.addEventListener("input",function(){S.airQ=q.value;S.airN=60;airRender()});
+  if(D.onair)return airRender();
+  get("data/onair.json").then(function(j){D.onair=j;airRender()})
+   .catch(function(){document.getElementById("airRows").innerHTML='<p class="empty">Could not load.</p>'});
+}
+
+/* ---------- reader ---------- */
 function textRender(id){
   var box=document.getElementById("readerBox"); if(!box)return;
   var a=(D.full||[]).filter(function(x){return String(x.id)===String(id)})[0];
-  if(!a){box.innerHTML='<button class="back" id="back">← All written works</button><div class="notice"><strong>Not available in this build.</strong> This record is either held for review or not yet transferred.</div>';
-    var b0=document.getElementById("back"); if(b0)b0.addEventListener("click",function(){location.hash="#/library"}); return}
+  if(!a){
+    box.innerHTML='<button class="back" id="back">← All written works</button><div class="notice"><strong>Not available in this build.</strong> This record is either held for review or has no written body.</div>';
+    var b0=document.getElementById("back"); if(b0)b0.addEventListener("click",function(){location.hash="#/library"});return}
   var notice="";
   if(a.source_is_excerpt_only)
-    notice+='<div class="notice"><strong>This page carries only an excerpt.</strong> The source publishes the opening of this text and breaks off, with the remainder behind a separate document that has not been obtained. The English ends exactly where the Arabic ends.</div>';
-  if(a.type==="audio_only")
-    notice+='<div class="notice"><strong>No written answer exists.</strong> The Sheikh answered this question aloud. Only the question has been translated; the answer is in the recording.</div>';
+    notice+='<div class="notice"><strong>This page carries only an excerpt.</strong> The source publishes the opening and breaks off, with the remainder behind a separate document that has not been obtained. The English ends exactly where the Arabic ends.</div>';
   if(a.date_is_cms_upload)
-    notice+='<div class="notice"><strong>The date is not the date of composition.</strong> The source serves a bulk-upload timestamp. Several texts are demonstrably years older than the date shown.</div>';
+    notice+='<div class="notice"><strong>The date shown is not the date of composition.</strong> The source serves a bulk-upload timestamp; several texts are demonstrably years older than their stamp.</div>';
   var badges='<span class="badge draft">Unreviewed draft</span><span class="badge">'+esc((a.type||"text").replace("_"," "))+'</span>'
     +(a.chars_ar?'<span class="badge">'+n(a.chars_ar)+' Arabic characters</span>':"")
     +(a.category_en?'<span class="badge">'+esc(a.category_en)+'</span>':"");
   var fl=(a.flags||[]).filter(function(f){return f&&typeof f==="object"});
   var fh="";
   if(fl.length){
-    fh='<div class="flags"><p class="eyebrow">Translator’s notes</p><h3 style="margin:4px 0 14px">'+fl.length+' point'+(fl.length>1?"s":"")+' left open for the reviewer</h3>'
+    fh='<div class="flags"><p class="eyebrow">Translator’s notes</p><h3 style="margin:8px 0 18px;font-size:22px">'+fl.length+' point'+(fl.length>1?"s":"")+' left open for the reviewer</h3>'
       +fl.map(function(f){
         var o=(f.options||[]).map(function(x,i){return '<li class="'+(f.recommended===i?"rec":"")+'" data-n="'+(i+1)+'">'+esc(x)+'</li>'}).join("");
         return '<div class="flag">'+(f.arabic?'<p class="flag-ar">'+esc(f.arabic)+'</p>':"")
-          +(f.context?'<p class="flag-note" style="margin:0 0 4px">'+esc(f.context)+'</p>':"")
+          +(f.context?'<p class="flag-note" style="margin:0 0 6px">'+esc(f.context)+'</p>':"")
           +(o?'<ul class="flag-opts">'+o+'</ul>':"")
           +(f.note?'<p class="flag-note">'+esc(f.note)+'</p>':"")+'</div>'}).join("")+'</div>';
   }
   box.innerHTML='<button class="back" id="back">← All written works</button>'+notice
-    +'<h1>'+esc(a.title_en||"Untitled")+'</h1>'
-    +'<p class="reader-ar-title">'+esc(a.title_ar||"")+'</p>'
-    +'<div class="reader-meta">'+badges+'</div>'
+    +'<h1 class="r r1">'+esc(a.title_en||"Untitled")+'</h1>'
+    +'<p class="reader-ar-title r r1">'+esc(a.title_ar||"")+'</p>'
+    +'<div class="reader-meta r r2">'+badges+'</div>'
     +'<div class="pane-toggle chips"><button class="chip'+(S.pane==="en"?" on":"")+'" data-p="en">English</button><button class="chip'+(S.pane==="ar"?" on":"")+'" data-p="ar">العربية</button></div>'
-    +'<div class="pages">'
-      +'<div class="page'+(S.pane==="ar"?" hide":"")+'" id="pgEn"><p class="page-label">English — draft</p><div class="body-en">'+(paras(a.body_en)||'<p style="color:var(--ink-faint)">No written answer on the source page.</p>')+'</div></div>'
-      +'<div class="page'+(S.pane==="en"?" hide":"")+'" id="pgAr"><p class="page-label">العربية — الأصل</p><div class="body-ar">'+(paras(a.body_ar)||'<p style="color:var(--ink-faint)">—</p>')+'</div></div>'
+    +'<div class="pages r r3">'
+      +'<div class="page'+(S.pane==="ar"?" hide":"")+'" id="pgEn"><p class="page-label">English — draft</p><div class="body-en">'+paras(a.body_en)+'</div></div>'
+      +'<div class="page'+(S.pane==="en"?" hide":"")+'" id="pgAr"><p class="page-label">العربية — الأصل</p><div class="body-ar">'+paras(a.body_ar)+'</div></div>'
     +'</div>'+fh
-    +'<p style="margin-top:28px"><a href="'+esc(a.source_url||"#")+'" target="_blank" rel="noopener" style="font-family:var(--mono);font-size:11.5px;color:var(--accent)">View the original on dedewnet.com ↗</a></p>';
+    +'<p style="margin-top:32px"><a href="'+esc(a.source_url||"#")+'" target="_blank" rel="noopener" style="font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--gold)">View the original on dedewnet.com ↗</a></p>';
   document.getElementById("back").addEventListener("click",function(){location.hash="#/library"});
   var pt=box.querySelector(".pane-toggle");
   pt.addEventListener("click",function(e){
@@ -441,11 +604,12 @@ function textBind(id){
    .catch(function(){document.getElementById("readerBox").innerHTML='<p class="empty">The text could not be loaded.</p>'});
 }
 
+/* ---------- held ---------- */
 function vReview(){
   return '<section class="sec"><div class="wrap">'
-   +'<div class="sec-head"><p class="eyebrow">Section three</p><h2>Held for Review</h2>'
-   +'<p>These texts are translated but deliberately kept out of the reading list. Their English is not served to this site at all — only the title and the reason. Each needs a decision from the Sheikh’s office, and in some cases legal advice, before it can be published in English.</p></div>'
-   +'<div id="revBox"><p class="loading">Loading…</p></div></div></section>';
+   +'<div class="sec-head r r1"><p class="eyebrow">Section four</p><h2>Held for Review</h2>'
+   +'<p>Translated, but deliberately kept out of the reading list. Their English is not served to this site at all — only the title and the reason. Each needs a decision from the Sheikh’s office, and in some cases legal advice, before it can be published in English.</p></div>'
+   +'<div id="revBox" class="r r2"><p class="loading">Loading…</p></div></div></section>';
 }
 
 function revRender(){
@@ -462,8 +626,8 @@ function revRender(){
         +'<span class="row-side">#'+h.id+'</span></div>'}).join("")+'</div>';
   }
   box.innerHTML='<div class="notice warn"><strong>Why these are held.</strong> A text that states a scholarly disagreement and breaks off before the Sheikh gives his own view will be read as his ruling by anyone who does not know better. And a handful carry positions that, published in English without context, raise legal questions in the jurisdictions where this will be read. Faithfulness belongs in the file; the decision to publish belongs to the Sheikh’s office.</div>'
-   +'<h3 style="margin:26px 0 10px">Flagged for legal or editorial decision — '+legal.length+'</h3>'+rows(legal)
-   +'<h3 style="margin:32px 0 10px">Stops before the Sheikh gives his ruling — '+ruling.length+'</h3>'+rows(ruling);
+   +'<h3 style="margin:30px 0 12px;font-size:22px">Flagged for legal or editorial decision — '+legal.length+'</h3>'+rows(legal)
+   +'<h3 style="margin:38px 0 12px;font-size:22px">Stops before the Sheikh gives his ruling — '+ruling.length+'</h3>'+rows(ruling);
 }
 
 function revBind(){
@@ -472,21 +636,22 @@ function revBind(){
    .catch(function(){document.getElementById("revBox").innerHTML='<p class="empty">Could not load.</p>'});
 }
 
+/* ---------- media ---------- */
 function vMedia(){
-  var s=D.stats||ST;
+  var s=S_();
   return '<section class="sec"><div class="wrap">'
-   +'<div class="sec-head"><p class="eyebrow">Section two</p><h2>Recorded Lectures</h2>'
-   +'<p>The Sheikh teaches and answers aloud, so most of his work is spoken. '+n(s.media)+' recordings — '+n(s.video)+' video, '+n(s.audio)+' audio — catalogued under English subject headings. The recordings are in Arabic; English titles are being written as the translation reaches each category.</p></div>'
-   +'<div id="catBox"><p class="loading">Loading categories…</p></div></div></section>';
+   +'<div class="sec-head r r1"><p class="eyebrow">Section three</p><h2>Recorded Lectures</h2>'
+   +'<p>The Sheikh teaches and answers aloud, so most of his work is spoken. '+n(s.media||3473)+' recordings — '+n(s.video||2162)+' video, '+n(s.audio||1309)+' audio — under English subject headings. The recordings are in Arabic; English titles are written as the translation reaches each category.</p></div>'
+   +'<div id="catBox" class="r r2"><p class="loading">Loading categories…</p></div></div></section>';
 }
 
 function medRender(){
   var box=document.getElementById("catBox"); if(!box||!D.cats)return;
   box.innerHTML='<div class="catgrid">'+D.cats.map(function(c){
     return '<button class="cat" data-c="'+c.id+'">'
-      +'<span class="cat-en">'+esc(c.en||"Category "+c.id)+'</span>'
+      +'<span class="cat-en">'+esc(c.en||("Category "+c.id))+'</span>'
       +'<span class="cat-ar">'+esc(c.ar||"")+'</span>'
-      +'<span class="cat-n">'+n(c.n)+' recording'+(c.n===1?"":"s")+(c.en?"":" · title pending")+'</span></button>'}).join("")+'</div>';
+      +'<span class="cat-n">'+n(c.n)+' recording'+(c.n===1?"":"s")+'</span></button>'}).join("")+'</div>';
   box.querySelectorAll(".cat").forEach(function(b){b.addEventListener("click",function(){location.hash="#/lectures/"+b.dataset.c})});
 }
 
@@ -496,35 +661,25 @@ function medBind(){
    .catch(function(){document.getElementById("catBox").innerHTML='<p class="empty">Categories could not be loaded.</p>'});
 }
 
-function vCat(cid){return '<section class="sec"><div class="wrap" id="catView"><p class="loading">Loading recordings…</p></div></section>'}
-
 function catRender(cid){
   var box=document.getElementById("catView"); if(!box)return;
   var cat=(D.cats||[]).filter(function(c){return String(c.id)===String(cid)})[0]||{};
-  if(!D.media){
-    box.innerHTML='<button class="back" id="back">← All categories</button>'
-      +'<div class="sec-head"><h2>'+esc(cat.en||"Category")+'</h2><p class="ar" style="margin:4px 0 0;font-size:19px">'+esc(cat.ar||"")+'</p></div>'
-      +'<div class="notice"><strong>The recording list is not in this build.</strong> All '+n(ST.media)+' recordings are catalogued with their playable URLs in the project folder; the file carrying them is still being transferred. The category structure shown is the real one.</div>';
-    document.getElementById("back").addEventListener("click",function(){location.hash="#/media"});
-    return;
-  }
-  var items=D.media.filter(function(m){return String(m.c)===String(cid)});
+  var items=(D.media||[]).filter(function(m){return String(m.c)===String(cid)});
   var q=S.medQ.trim();
   var list=items.filter(function(m){
     if(S.medType!=="all"&&m.y!==S.medType)return false;
-    return !q||(m.t||"").indexOf(q)>-1;
-  });
+    return !q||(m.t||"").indexOf(q)>-1});
   var rows=list.slice(0,S.medN).map(function(m){
     var b='<span class="badge soon">Translation coming soon</span>';
-    if(m.k==="site_flv")b+=' <span class="badge flagged">Legacy format</span>';
+    if(m.k==="site_flv")b+='<span class="badge flagged">Legacy format</span>';
     return '<button class="row" data-i="'+m.i+'">'
       +'<span class="row-kind">'+(m.y==="video"?"Video":"Audio")+'</span>'
-      +'<span class="row-main"><p class="row-ar" style="font-size:17.5px;color:var(--ink);margin:0">'+esc(m.t||"")+'</p>'
+      +'<span class="row-main"><p class="row-ar" style="font-size:18px;color:var(--ink);margin:0">'+esc(m.t||"")+'</p>'
       +'<span class="row-meta">'+b+'</span></span><span class="row-side">'+(m.d||"")+'</span></button>'}).join("");
   box.innerHTML='<button class="back" id="back">← All categories</button>'
-   +'<div class="sec-head"><h2>'+esc(cat.en||"Category")+'</h2><p class="ar" style="margin:4px 0 0;font-size:19px">'+esc(cat.ar||"")+'</p></div>'
-   +'<div class="notice">Titles are still in Arabic. Each recording is the Sheikh speaking in Arabic; English titles are written as the translation reaches each category.</div>'
-   +'<div class="controls"><label class="search"><span style="color:var(--ink-faint)">⌕</span><input id="medQ" type="search" placeholder="Search Arabic titles…"></label>'
+   +'<div class="sec-head"><h2>'+esc(cat.en||"Category")+'</h2>'
+   +'<p style="font-family:var(--ar);direction:rtl;text-align:right;font-size:20px;margin:8px 0 0;color:var(--ink-3)">'+esc(cat.ar||"")+'</p></div>'
+   +'<div class="controls"><label class="search"><span style="color:var(--ink-4)">⌕</span><input id="medQ" type="search" placeholder="Search Arabic titles…"></label>'
    +'<div class="chips" id="medChips"><button class="chip'+(S.medType==="all"?" on":"")+'" data-t="all">All</button>'
    +'<button class="chip'+(S.medType==="video"?" on":"")+'" data-t="video">Video</button>'
    +'<button class="chip'+(S.medType==="audio"?" on":"")+'" data-t="audio">Audio</button></div></div>'
@@ -535,7 +690,7 @@ function catRender(cid){
   var qq=document.getElementById("medQ"); qq.value=S.medQ;
   qq.addEventListener("input",function(){S.medQ=qq.value;S.medN=60;catRender(cid)});
   document.getElementById("medChips").addEventListener("click",function(e){
-    var b=e.target.closest(".chip"); if(!b)return; S.medType=b.dataset.t;S.medN=60;catRender(cid)});
+    var b=e.target.closest(".chip"); if(!b)return;S.medType=b.dataset.t;S.medN=60;catRender(cid)});
   var mm=document.getElementById("medMore"); if(mm)mm.addEventListener("click",function(){S.medN+=60;catRender(cid)});
   box.querySelectorAll(".row").forEach(function(r){r.addEventListener("click",function(){play(r.dataset.i)})});
 }
@@ -543,33 +698,36 @@ function catRender(cid){
 function play(id){
   var m=(D.media||[]).filter(function(x){return String(x.i)===String(id)})[0];
   var slot=document.getElementById("playerSlot"); if(!m||!slot)return;
-  var h='<h3 style="margin:0 0 4px">Now playing</h3><p class="ar" style="margin:0 0 12px;font-size:19px">'+esc(m.t||"")+'</p>';
+  var h='<p class="eyebrow" style="margin-bottom:8px">Now playing</p>'
+   +'<p style="font-family:var(--ar);direction:rtl;text-align:right;margin:0 0 16px;font-size:20px;line-height:1.8">'+esc(m.t||"")+'</p>';
   if(m.k==="youtube"){
     var vid=(m.u||"").split("v=")[1]||"";
-    h+='<div style="background:#000;border-radius:7px;overflow:hidden;margin-bottom:14px;aspect-ratio:16/9;max-width:100%"><iframe src="https://www.youtube.com/embed/'+esc(vid)+'" title="Lecture" style="width:100%;height:100%;border:0;display:block" allow="accelerometer; encrypted-media; picture-in-picture" allowfullscreen loading="lazy"></iframe></div>';
+    h+='<div style="background:#000;border-radius:8px;overflow:hidden;margin-bottom:16px;aspect-ratio:16/9;max-width:100%"><iframe src="https://www.youtube.com/embed/'+esc(vid)+'" title="Lecture" style="width:100%;height:100%;border:0;display:block" allow="accelerometer; encrypted-media; picture-in-picture" allowfullscreen loading="lazy"></iframe></div>';
   }else if(m.k==="site_mp3"){
-    h+='<div style="background:var(--surface);border:1px solid var(--rule);border-radius:7px;padding:16px;margin-bottom:14px"><audio controls preload="none" style="width:100%;display:block" src="'+esc(m.u)+'"></audio></div>';
+    h+='<div style="background:var(--surface);border:1px solid var(--rule);border-radius:8px;padding:18px;margin-bottom:16px"><audio controls preload="none" style="width:100%;display:block" src="'+esc(m.u)+'"></audio></div>';
   }else{
-    h+='<div style="background:var(--warn-soft);border:1px solid var(--warn);border-radius:7px;padding:18px;margin-bottom:14px;font-size:14px;color:var(--ink-soft)"><strong style="color:var(--ink)">Stored as Flash video (FLV)</strong><br>No current browser can play this format. The file still exists on the source server and needs converting to MP4 — 603 recordings in the library are in the same state.</div>';
+    h+='<div class="notice warn" style="margin-bottom:16px"><strong>Stored as Flash video (FLV).</strong> No current browser can play this format. The file still exists on the source server and needs converting to MP4 — 603 recordings are in the same state.</div>';
   }
-  slot.innerHTML=h+'<p style="margin:0 0 22px"><a href="'+esc(m.u||"#")+'" target="_blank" rel="noopener" style="font-family:var(--mono);font-size:11.5px;color:var(--accent)">Open the source file ↗</a></p>';
+  slot.innerHTML=h+'<p style="margin:0 0 26px"><a href="'+esc(m.u||"#")+'" target="_blank" rel="noopener" style="font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--gold)">Open the source file ↗</a></p>';
   slot.scrollIntoView({behavior:"smooth",block:"start"});
 }
 
 function catBind(cid){
   var need=[];
   if(!D.cats)need.push(get("data/media-categories.json").then(function(j){D.cats=j}));
-  if(!D.media)need.push(get("data/media.json").then(function(j){D.media=j}).catch(function(){D.media=null}));
+  if(!D.media)need.push(get("data/media.json").then(function(j){D.media=j}));
   if(!need.length)return catRender(cid);
-  Promise.all(need).then(function(){catRender(cid)}).catch(function(){catRender(cid)});
+  Promise.all(need).then(function(){catRender(cid)}).catch(function(){
+    document.getElementById("catView").innerHTML='<p class="empty">Recordings could not be loaded.</p>'});
 }
 
+/* ---------- glossary ---------- */
 function vGloss(){
   return '<section class="sec"><div class="wrap">'
-   +'<div class="sec-head"><p class="eyebrow">Section four</p><h2>Glossary</h2>'
-   +'<p>Fixed across the whole edition. Most of these exist because a loose translation would change a ruling — <em>mustaḥabb</em> rendered as “obligatory”, or <em>makrūh</em> as “forbidden”, puts a position in the Sheikh’s mouth that is not his.</p></div>'
-   +'<div class="controls"><label class="search"><span style="color:var(--ink-faint)">⌕</span><input id="glQ" type="search" placeholder="Search a term, English or Arabic…"></label></div>'
-   +'<div id="glBox"><p class="loading">Loading…</p></div></div></section>';
+   +'<div class="sec-head r r1"><p class="eyebrow">Section five</p><h2>Glossary</h2>'
+   +'<p>141 renderings fixed across the whole edition. Most exist because a loose translation would change a ruling — <em>mustaḥabb</em> given as “obligatory”, or <em>makrūh</em> as “forbidden”, puts a position in the Sheikh’s mouth that is not his.</p></div>'
+   +'<div class="controls r r2"><label class="search"><span style="color:var(--ink-4)">⌕</span><input id="glQ" type="search" placeholder="Search a term, English or Arabic…"></label></div>'
+   +'<div id="glBox" class="r r3"><p class="loading">Loading…</p></div></div></section>';
 }
 
 function glRender(q){
@@ -577,7 +735,8 @@ function glRender(q){
   q=(q||"").trim().toLowerCase();
   var list=D.gloss.terms.filter(function(t){
     if(!q)return true;
-    return (t.en||"").toLowerCase().indexOf(q)>-1||(t.tr||"").toLowerCase().indexOf(q)>-1||(t.ar||"").indexOf(q)>-1||(t.field||"").indexOf(q)>-1});
+    return (t.en||"").toLowerCase().indexOf(q)>-1||(t.tr||"").toLowerCase().indexOf(q)>-1
+      ||(t.ar||"").indexOf(q)>-1||(t.field||"").indexOf(q)>-1});
   if(!list.length){box.innerHTML='<p class="empty">No term matches that.</p>';return}
   box.innerHTML='<div class="gloss">'+list.map(function(t){
     return '<div class="term"><div><p class="term-ar">'+esc(t.ar)+'</p><span class="term-tr">'+esc(t.tr)+'</span></div>'
@@ -593,42 +752,51 @@ function glBind(){
    .catch(function(){document.getElementById("glBox").innerHTML='<p class="empty">Could not load.</p>'});
 }
 
+/* ---------- method ---------- */
 function vMethod(){
-  var s=D.stats||ST;
-  return '<section class="sec"><div class="wrap"><div class="sec-head"><p class="eyebrow">Section five</p><h2>Method</h2></div><div class="prose">'
+  var s=S_();
+  return '<section class="sec"><div class="wrap"><div class="sec-head r r1"><p class="eyebrow">Section six</p><h2>Method</h2></div>'
+  +'<div class="prose r r2">'
   +'<p>This edition is being produced by Ummah Collective. Nothing here is a finished translation, and the site says so on every page rather than burying it in a disclaimer.</p>'
   +'<h3>What is being translated</h3>'
-  +'<p>The source site publishes <strong>957 written items</strong>, of which <strong>555 carry real text</strong>. The other 402 are a question with no written answer — the Sheikh replied aloud, and the reply exists only as a recording. Alongside them sit <strong>3,473 recordings</strong>, which is where most of his teaching actually lives.</p>'
+  +'<p>The source site publishes <strong>957 written items</strong>, of which <strong>555 carry real text</strong>. The rest are a question with no written answer — the Sheikh replied aloud, and the reply exists only as a recording. Alongside them sit <strong>3,473 recordings</strong>, which is where most of his teaching actually lives.</p>'
   +'<h3>Plain English, with the term kept</h3>'
-  +'<p>The English carries the meaning and the Arabic term rides along in brackets on first use — “disliked (<em>makrūh</em>)”, not “it is makrūh”. Five rulings are fixed and never varied, because this is where a translation silently changes a scholar’s position:</p>'
+  +'<p>The English carries the meaning and the Arabic term rides along in brackets on first use — “disliked (<em>makrūh</em>)”, not “it is makrūh”. Five rulings are fixed and never varied, because this is exactly where a translation silently changes a scholar’s position:</p>'
   +'<ul><li><strong>wājib / farḍ</strong> — obligatory</li><li><strong>mandūb / mustaḥabb</strong> — recommended</li><li><strong>mubāḥ</strong> — permissible</li><li><strong>makrūh</strong> — disliked, never “forbidden”</li><li><strong>ḥarām</strong> — forbidden, never “discouraged”</li></ul>'
   +'<p>Terms of rational modality in creed are exempt: <em>wājib</em> said of God means necessarily true, not obligatory. Applying the legal table there makes nonsense of a creedal passage.</p>'
   +'<h3>What a translator may not do</h3>'
-  +'<p>Resolve a question the Sheikh left open. Soften or strengthen a ruling. Add reasoning he did not give. Silently repair an apparent error in the source. Where the Arabic is genuinely ambiguous the uncertainty is recorded as a note with two or three candidate renderings — <strong>'+n(s.flags)+' such notes</strong> across the texts translated so far.</p>'
+  +'<p>Resolve a question the Sheikh left open. Soften or strengthen a ruling. Add reasoning he did not give. Silently repair an apparent error in the source. Where the Arabic is genuinely ambiguous the uncertainty is recorded as a note carrying two or three candidate renderings — <strong>'+n(s.flags||2226)+' such notes</strong> across the texts translated so far.</p>'
   +'<h3>Review states</h3>'
-  +'<ul><li><strong>Unreviewed draft</strong> — translated, not yet checked. Everything here is at this stage.</li><li><strong>Checked</strong> — read against the Arabic by Ummah Collective.</li><li><strong>Approved</strong> — signed off by the Sheikh’s office. Only then does a text lose its draft mark.</li></ul>'
+  +'<ul><li><strong>Unreviewed draft</strong> — translated, not yet checked. Everything here is at this stage.</li>'
+  +'<li><strong>Checked</strong> — read against the Arabic by Ummah Collective.</li>'
+  +'<li><strong>Approved</strong> — signed off by the Sheikh’s office. Only then does a text lose its draft mark.</li></ul>'
   +'<h3>Defects in the source, recorded not hidden</h3>'
-  +'<p>Dates are bulk-upload timestamps, not dates of composition — several texts are demonstrably years older than the date shown. Many pages publish only an opening excerpt and break off mid-sentence. Some state a disagreement among scholars and stop before the Sheikh gives his view, which is why those are held back. A few serve one body under several identifiers, and at least one serves an answer that does not match its own title. All of it is flagged; none of it is quietly corrected.</p>'
+  +'<p>Dates are bulk-upload timestamps rather than dates of composition — several texts are demonstrably years older than the date shown. Many pages publish only an opening excerpt and break off mid-sentence. Some state a disagreement among scholars and stop before the Sheikh gives his view, which is why those are held back. A few serve one body under several identifiers, and at least one serves an answer that does not match its own title. All of it is flagged; none of it is quietly corrected.</p>'
   +'</div></div></section>';
 }
 
+/* ---------- router ---------- */
 function route(){
   var h=location.hash||"#/", view=document.getElementById("view");
   var p=h.replace(/^#\//,"").split("/"), page=p[0]||"";
   nav.querySelectorAll("a").forEach(function(a){a.classList.toggle("on",a.getAttribute("href")==="#/"+page)});
   if(page==="library"){view.innerHTML=vLibrary();libBind()}
+  else if(page==="onair"){view.innerHTML=vOnAir();airBind()}
   else if(page==="text"){view.innerHTML='<section class="reader"><div class="wrap" id="readerBox"><p class="loading">Loading the text…</p></div></section>';textBind(p[1])}
   else if(page==="media"){view.innerHTML=vMedia();medBind()}
-  else if(page==="lectures"){view.innerHTML=vCat(p[1]);catBind(p[1])}
+  else if(page==="lectures"){view.innerHTML='<section class="sec"><div class="wrap" id="catView"><p class="loading">Loading recordings…</p></div></section>';catBind(p[1])}
   else if(page==="review"){view.innerHTML=vReview();revBind()}
   else if(page==="glossary"){view.innerHTML=vGloss();glBind()}
   else if(page==="method"){view.innerHTML=vMethod()}
-  else{view.innerHTML=vHome()}
+  else{view.innerHTML=vHome();countUp()}
   if(page!=="text")window.scrollTo(0,0);
 }
 
 function boot(){
-  get("data/stats.json").then(function(j){D.stats=j;if(!location.hash||location.hash==="#/")route()}).catch(function(){});
+  get("data/stats.json").then(function(j){
+    D.stats=j;
+    if(!location.hash||location.hash==="#/"){route()}
+  }).catch(function(){});
   window.addEventListener("hashchange",route);
   route();
 }
