@@ -1,0 +1,50 @@
+{
+  "name": "Dedew Library",
+  "short_name": "Dedew",
+  "description": "An English edition in preparation of the written works of Sheikh Muhammad al-Hasan Ould al-Dedew al-Shinqiti.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0D0F11",
+  "theme_color": "#0D0F11",
+  "lang": "en",
+  "dir": "ltr",
+  "categories": [
+    "books",
+    "education",
+    "reference"
+  ],
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Texts",
+      "url": "./#/library"
+    },
+    {
+      "name": "Subjects",
+      "url": "./#/subjects"
+    },
+    {
+      "name": "Saved",
+      "url": "./#/saved"
+    }
+  ]
+}

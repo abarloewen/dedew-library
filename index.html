@@ -4,7 +4,24 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light dark">
+
 <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+<meta name="description" content="An English edition in preparation of the written works of Sheikh Muhammad al-Hasan Ould al-Dedew al-Shinqiti, beside the Arabic originals.">
+<title>Dedew Library</title>
+
+<link rel="icon" href="icons/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="icons/favicon-16.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+
+<meta name="application-name" content="Dedew Library">
+<meta name="apple-mobile-web-app-title" content="Dedew Library">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#EAEAE4" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0D0F11" media="(prefers-color-scheme: dark)">
 <title>Dedew Library</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -47,6 +64,15 @@
 
 *{box-sizing:border-box}
 [hidden]{display:none!important}
+/* Safe-area insets as tokens. Everything that touches an edge uses max() against
+   the design gutter rather than adding to it — adding is what pushed the header
+   and the edge controls inward when the app is opened from the iPhone home screen. */
+:root{
+  --sat:env(safe-area-inset-top,0px);--sab:env(safe-area-inset-bottom,0px);
+  --sal:env(safe-area-inset-left,0px);--sar:env(safe-area-inset-right,0px);
+  --gut:22px;--hdr-h:62px;
+}
+@media (max-width:520px){:root{--gut:17px}}
 html{-webkit-text-size-adjust:100%}
 img{max-width:100%}
 body{
@@ -59,8 +85,8 @@ body{
 a{color:inherit}
 button{font:inherit;color:inherit}
 :focus-visible{outline:2px solid var(--gold);outline-offset:3px;border-radius:2px}
-.wrap{max-width:var(--maxw);margin:0 auto;padding-inline:22px}
-@media (max-width:520px){.wrap{padding-inline:17px}}
+.wrap{max-width:var(--maxw);margin:0 auto;
+  padding-inline-start:max(var(--gut),var(--sal));padding-inline-end:max(var(--gut),var(--sar))}
 
 /* ============ motion ============ */
 @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
@@ -103,8 +129,12 @@ button{font:inherit;color:inherit}
 
 /* ============ header ============ */
 .hdr{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--paper) 90%,transparent);
-  backdrop-filter:saturate(1.5) blur(14px);border-bottom:1px solid var(--rule)}
-.hdr-in{display:flex;align-items:center;gap:20px;height:66px}
+  backdrop-filter:saturate(1.5) blur(14px);border-bottom:1px solid var(--rule);
+  /* in standalone mode the web view starts behind the status bar; this keeps the
+     bar itself clear of it without shifting anything in a normal browser tab */
+  padding-top:var(--sat)}
+.hdr-in{display:flex;align-items:center;gap:20px;height:var(--hdr-h)}
+@media (display-mode:standalone){body{padding-bottom:var(--sab)}}
 .brand{display:flex;align-items:baseline;gap:11px;text-decoration:none;margin-inline-end:auto;min-width:0;overflow:hidden}
 .brand-ar{font-family:var(--ar);font-size:23px;line-height:1;white-space:nowrap;
   overflow:hidden;text-overflow:ellipsis;min-width:0}
@@ -113,8 +143,12 @@ button{font:inherit;color:inherit}
 .brand-en{font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-4);white-space:nowrap}
 @media (max-width:420px){.brand-en{display:none}}
 .nav{display:flex;gap:1px;align-items:center}
+.nav .nav-grp{display:none}
 .nav a{text-decoration:none;font-size:13.5px;padding:8px 12px;border-radius:5px;color:var(--ink-2);
-  position:relative;transition:color .18s}
+  position:relative;transition:color .18s;white-space:nowrap}
+.nav a .nav-n{display:none}
+.nav a.sec-link{display:none}
+@media (min-width:1080px){.nav a.sec-link{display:block}}
 .nav a:hover{color:var(--ink)}
 .nav a.on{color:var(--ink)}
 .nav a.on::after{content:"";position:absolute;left:12px;right:12px;bottom:2px;height:1.5px;background:var(--gold)}
@@ -132,16 +166,28 @@ button{font:inherit;color:inherit}
     padding-top:calc(28px + env(safe-area-inset-top,0px));
     padding-bottom:calc(28px + env(safe-area-inset-bottom,0px))}
   .nav.open{display:flex}
-  .nav a{font-size:clamp(26px,7vw,34px);font-family:var(--display);font-weight:300;
-    padding:14px 18px;text-align:center;animation:rise .5s var(--ease) both}
-  .nav.open a:nth-child(2){animation-delay:.04s}
-  .nav.open a:nth-child(3){animation-delay:.08s}
-  .nav.open a:nth-child(4){animation-delay:.12s}
-  .nav.open a:nth-child(5){animation-delay:.16s}
-  .nav.open a:nth-child(6){animation-delay:.20s}
-  .nav.open a:nth-child(7){animation-delay:.24s}
-  .nav a.on::after{left:50%;right:auto;transform:translateX(-50%);width:26px}
-  .nav-close{position:absolute;top:calc(16px + env(safe-area-inset-top,0px));inset-inline-end:16px}
+  /* base rule centres on the cross axis; in a column that shrink-wraps every
+     item, which left the labels floating in the middle of the sheet */
+  .nav{justify-content:flex-start;align-items:stretch;gap:0;
+    padding-inline:max(24px,var(--sal)) max(24px,var(--sar));
+    padding-top:calc(var(--sat) + 62px);padding-bottom:calc(28px + var(--sab))}
+  .nav .nav-grp{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--ink-4);margin:22px 0 6px;padding-inline:4px}
+  .nav .nav-grp:first-of-type{margin-top:0}
+  .nav a{display:flex;align-items:baseline;justify-content:space-between;gap:14px;
+    font-size:clamp(20px,5.4vw,26px);font-family:var(--display);font-weight:300;
+    padding:11px 4px;text-align:start;border-bottom:1px solid var(--rule-2);
+    animation:rise .4s var(--ease) both}
+  .nav a.sec-link{display:flex}
+  .nav a:last-child{border-bottom:0}
+  .nav a .nav-n{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.08em;
+    color:var(--ink-4);flex:none}
+  .nav.open>*:nth-child(n+2){animation-delay:.03s}
+  .nav.open>*:nth-child(n+5){animation-delay:.06s}
+  .nav.open>*:nth-child(n+9){animation-delay:.09s}
+  .nav a.on::after{left:4px;right:auto;bottom:6px;width:22px}
+  .nav-close{position:fixed;top:calc(var(--sat) + 12px);inset-inline-end:max(14px,var(--sar));
+    width:42px;height:42px;border-color:var(--rule)}
   .burger{display:grid}
 }
 
@@ -241,6 +287,15 @@ h3{font-size:19px;line-height:1.28;letter-spacing:-.01em}
 .notice{border:1px solid var(--rule);border-inline-start:2px solid var(--gold);background:var(--surface);
   padding:16px 18px;margin:0 0 22px;font-size:14.5px;color:var(--ink-2);line-height:1.6}
 .notice.warn{border-inline-start-color:var(--rust)}
+.notice.quiet{border-inline-start-color:var(--rule);color:var(--ink-3);font-size:14px;padding-block:10px}
+.notices{display:grid;gap:8px;margin:0 0 22px}
+.notices .notice{margin:0}
+.notices .more{display:grid;gap:8px}
+.morebtn{justify-self:start;background:none;border:0;padding:4px 0;cursor:pointer;
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--ink-4);transition:color .18s}
+.morebtn:hover{color:var(--ink-2)}
+@media print{.notices .more{display:grid!important}.morebtn{display:none}}
 .notice strong{color:var(--ink);font-weight:600}
 
 /* ============ reader ============ */
@@ -347,6 +402,25 @@ h3{font-size:19px;line-height:1.28;letter-spacing:-.01em}
 .sr .ctx{font-size:14px;color:var(--ink-3);line-height:1.5}
 .sr .ctx mark{background:var(--gold-wash);color:var(--ink);padding:0 2px;border-radius:2px}
 .sr .mt{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-4);margin-top:6px}
+
+.row-why{margin:7px 0 0;font-size:14.5px;line-height:1.55;color:var(--ink-3);max-width:62ch}
+.foot-nav{margin:0 0 8px}
+.foot-nav a{text-decoration:none;color:var(--ink-3)}
+.foot-nav a:hover{color:var(--ink)}
+
+/* ============ back to top ============ */
+.totop{position:fixed;z-index:75;inset-block-end:calc(18px + var(--sab));
+  inset-inline-end:max(18px,var(--sar));width:46px;height:46px;border-radius:50%;
+  display:grid;place-items:center;cursor:pointer;
+  background:var(--paper);color:var(--ink-2);border:1px solid var(--rule);
+  box-shadow:0 2px 14px color-mix(in srgb,var(--ink) 14%,transparent);
+  opacity:0;transform:translateY(10px) scale(.94);pointer-events:none;
+  transition:opacity .22s var(--ease),transform .22s var(--ease),color .18s}
+.totop.show{opacity:1;transform:none;pointer-events:auto}
+.totop:hover{color:var(--ink);border-color:var(--ink-4)}
+.totop svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.7;
+  stroke-linecap:round;stroke-linejoin:round}
+@media print{.totop{display:none}}
 
 /* ============ reading progress ============ */
 .prog{position:fixed;top:0;inset-inline-start:0;height:2px;background:var(--gold);z-index:70;width:0;
@@ -535,25 +609,33 @@ h3{font-size:19px;line-height:1.28;letter-spacing:-.01em}
     <a class="brand" href="#/"><span class="brand-ar">محمد الحسن الددو</span><span class="brand-en">Library</span></a>
     <nav class="nav" id="nav">
       <button class="iconbtn nav-close" id="navClose" aria-label="Close menu">✕</button>
-      <a href="#/library">Written Works</a>
-      <a href="#/subjects">Subjects</a>
-      <a href="#/onair">On Air</a>
-      <a href="#/media">Lectures</a>
-      <a href="#/review">Held</a>
-      <a href="#/glossary">Glossary</a>
-      <a href="#/saved">Saved</a>
-      <a href="#/method">Method</a>
+      <p class="nav-grp">Read</p>
+      <a href="#/library">Texts<span class="nav-n" data-n="texts"></span></a>
+      <a href="#/subjects">Subjects<span class="nav-n" data-n="subjects"></span></a>
+      <a href="#/glossary">Glossary<span class="nav-n" data-n="terms"></span></a>
+      <p class="nav-grp">Listen</p>
+      <a href="#/onair">On Air<span class="nav-n" data-n="onair"></span></a>
+      <a href="#/media">Lectures<span class="nav-n" data-n="media"></span></a>
+      <p class="nav-grp">About this edition</p>
+      <a class="sec-link" href="#/saved">Saved<span class="nav-n" data-n="saved"></span></a>
+      <a class="sec-link" href="#/review">To decide<span class="nav-n" data-n="held"></span></a>
+      <a class="sec-link" href="#/method">Method</a>
     </nav>
     <div class="icons">
       <button class="iconbtn" id="searchBtn" aria-label="Search" title="Search (press /)">⌕</button>
+      <a class="iconbtn" id="savedBtn" href="#/saved" aria-label="Saved texts" title="Saved">☆</a>
       <button class="iconbtn" id="themeBtn" aria-label="Toggle theme">◐</button>
       <button class="iconbtn burger" id="burger" aria-label="Open menu">☰</button>
     </div>
   </div>
 </header>
 <main id="view"></main>
+<button class="totop" id="toTop" aria-label="Back to top" title="Back to top">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V6M6 12l6-6 6 6"/></svg>
+</button>
 <footer class="foot"><div class="wrap">
   <p>Every translation here is an unreviewed draft pending approval by the Sheikh's office. The Arabic original is authoritative in every case.</p>
+  <p class="foot-nav"><a href="#/saved">Saved</a> · <a href="#/review">To decide</a> · <a href="#/method">Method</a></p>
   <p style="margin:0">Source: <a href="https://dedewnet.com" target="_blank" rel="noopener">dedewnet.com</a> · Built by Ummah Collective</p>
 </div></footer>
 </div>
@@ -561,9 +643,68 @@ h3{font-size:19px;line-height:1.28;letter-spacing:-.01em}
 <script>
 (function(){
 "use strict";
-var D={idx:null,full:null,held:null,onair:null,cats:null,media:null,gloss:null,stats:null};
+var D={idx:null,art:{},held:null,onair:null,cats:null,media:null,gloss:null,stats:null,bann:null};
 var S={libQ:"",libType:"all",libN:40,pane:"en",medQ:"",medType:"all",medN:60,airQ:"",airN:60};
-var ST={total:957,translated:957,texts:237,onair:401,held:319,corpus_written:958,corpus_with_text:557,media:3473,media_cats:99,video:2162,audio:1309,flags:2647,excerpt:164};
+var ST={total:958,translated:958,texts:557,partial:127,onair:401,held:0,decisions:27,corpus_written:958,corpus_with_text:557,media:3473,media_cats:99,video:2162,audio:1309,flags:2648,excerpt:164};
+
+/* Banner copy. A record names the banners it needs in its `bn` array; the order
+   here is the order they appear, heaviest first. */
+var BANNER={
+ decision:["warn","Flagged for a decision by the Sheikh\u2019s office.",""
+  +"The full text is here and has not been altered. What it needs is a reading by someone qualified, "
+  +"and a decision about whether and how it appears in English once this edition is public."],
+ partial:["warn","This text breaks off before the Sheikh gives his own position.",
+  "It sets out the question, and often the disagreement among scholars, but the source stops before he states his view. Do not read the last position stated here as his ruling \u2014 it is not."],
+ excerpt:["","This page carries only an excerpt.",
+  "The source publishes the opening and breaks off, with the remainder behind a separate document that has not been obtained. The English ends exactly where the Arabic ends."],
+ sensitive:["warn","Contested subject, unreviewed translation.",
+  "This is a study text, not guidance to act on. It has been translated faithfully, it has not yet been read by a qualified reviewer, and the subject is one on which scholars and communities differ sharply."],
+ context:["","This text has to be read whole.",
+  "Its parts depend on each other, and passages lifted out of it can be made to say close to the opposite of what is being argued. That is why the full text is here and not a summary."],
+ unsourced:["","A report here is given without a source.",
+  "The Sheikh names no collection, no chain and no grading, and none has been added. Its standing has not been established by this edition."],
+ polemic:["","Polemical terms have been carried into English.",
+  "The Arabic uses charged words for named communities. They are rendered literally rather than neutralised, because softening them would misreport the source. They are the speaker\u2019s words, not this edition\u2019s."],
+ dated:["","Read this with its date.",
+  "It records what was said at the time, in the circumstances of that time. It is not a statement about the present, and nothing in it has been updated."],
+ cmsdate:["quiet","The date shown is not the date of composition.",
+  "The source serves a bulk-upload timestamp; several texts are demonstrably years older than their stamp."]
+};
+var BANNER_ORDER=["decision","partial","excerpt","sensitive","context","unsourced","polemic","dated","cmsdate"];
+/* This is a reading app, so a stack of five warnings before the first line of
+   the text defeats the purpose. The heaviest one is shown; the rest are one tap
+   away and none is dropped. */
+function bannerHTML(list,why){
+  if(!list||!list.length)return "";
+  var seen={},out=[];
+  BANNER_ORDER.forEach(function(k){
+    if(list.indexOf(k)<0||seen[k])return; seen[k]=1;
+    var b=BANNER[k]; if(!b)return;
+    var extra=(k==="decision"&&why)?' <em style="color:var(--ink-2)">'+esc(why)+'</em>':"";
+    out.push('<div class="notice '+b[0]+'"><strong>'+b[1]+'</strong> '+b[2]+extra+'</div>');
+  });
+  if(!out.length)return "";
+  if(out.length===1)return '<div class="notices">'+out[0]+'</div>';
+  var rest=out.length-1;
+  return '<div class="notices">'+out[0]
+    +'<div class="more" hidden>'+out.slice(1).join("")+'</div>'
+    +'<button class="morebtn" id="moreNotes" aria-expanded="false">'
+    +rest+' more note'+(rest>1?"s":"")+' on this text <span aria-hidden="true">▾</span></button>'
+    +'</div>';
+}
+
+function bindNotes(){
+  var btn=document.getElementById("moreNotes"); if(!btn)return;
+  var box=btn.parentNode.querySelector(".more");
+  btn.addEventListener("click",function(){
+    var open=!box.hidden;
+    box.hidden=open;
+    btn.setAttribute("aria-expanded",String(!open));
+    btn.innerHTML=(open? box.children.length+' more note'+(box.children.length>1?"s":"")
+      +' on this text <span aria-hidden="true">▾</span>'
+      : 'Fewer notes <span aria-hidden="true">▴</span>');
+  });
+}
 
 function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
 function n(x){return (x==null?0:x).toLocaleString("en-US")}
@@ -912,7 +1053,11 @@ var nav=document.getElementById("nav");
 document.getElementById("searchBtn").addEventListener("click",openSearch);
 document.getElementById("burger").addEventListener("click",function(){nav.classList.add("open")});
 document.getElementById("navClose").addEventListener("click",function(){nav.classList.remove("open")});
-nav.addEventListener("click",function(e){if(e.target.tagName==="A")nav.classList.remove("open")});
+/* the menu items now carry a count span, so match the link, not the tap target */
+nav.addEventListener("click",function(e){
+  if(e.target&&e.target.closest&&e.target.closest("a"))nav.classList.remove("open")});
+document.addEventListener("keydown",function(e){
+  if(e.key==="Escape"&&nav.classList.contains("open"))nav.classList.remove("open")});
 
 /* ---------- count-up ---------- */
 function countUp(){
@@ -939,15 +1084,15 @@ function vHome(){
    +'<p class="lede r r3">A bilingual edition of the Mauritanian scholar’s fatwas, sermons, essays and lecture transcripts — each English draft set beside the Arabic it came from, and every uncertain rendering recorded rather than quietly resolved.</p>'
    +'<div class="statrow r r4">'
      +'<div class="stat"><b data-count="'+(s.total||957)+'">0</b><span>Records translated</span></div>'
-     +'<div class="stat"><b data-count="'+(s.texts||237)+'">0</b><span>Texts readable</span></div>'
+     +'<div class="stat"><b data-count="'+(s.texts||358)+'">0</b><span>Texts readable</span></div>'
      +'<div class="stat"><b data-count="'+(s.media||3473)+'">0</b><span>Recorded lectures</span></div>'
      +'<div class="stat"><b data-count="'+(s.flags||2647)+'">0</b><span>Translator’s notes</span></div>'
    +'</div></div></section>'
    +'<section class="sec"><div class="wrap"><div class="entries r r5">'
-     +'<a class="entry" href="#/library"><span class="n">01</span><h3>Written Works</h3><p>'+n(s.texts||237)+' texts with a real written body — English beside the Arabic, with the translator’s open questions kept in view.</p></a>'
+     +'<a class="entry" href="#/library"><span class="n">01</span><h3>Written Works</h3><p>'+n(s.texts||358)+' texts with a real written body — English beside the Arabic, with the translator’s open questions kept in view. '+n(s.partial||121)+' break off before the Sheikh’s ruling and say so.</p></a>'
      +'<a class="entry" href="#/onair"><span class="n">02</span><h3>Answered On Air</h3><p>'+n(s.onair||401)+' questions the Sheikh answered aloud. The question is translated; the answer lives only in the recording.</p></a>'
      +'<a class="entry" href="#/media"><span class="n">03</span><h3>Recorded Lectures</h3><p>'+n(s.media||3473)+' recordings across '+n(s.media_cats||99)+' subjects, every category named in English.</p></a>'
-     +'<a class="entry" href="#/review"><span class="n">04</span><h3>Held for Review</h3><p>'+n(s.held||319)+' texts kept out of the reading list. Their English is not served to this site at all.</p></a>'
+     +'<a class="entry" href="#/review"><span class="n">04</span><h3>Held for Review</h3><p>'+n(s.held||198)+' texts with legal or editorial exposure. Their English is not served to this site at all.</p></a>'
    +'</div></div></section>';
 }
 
@@ -957,7 +1102,7 @@ var TYPES=[["all","All"],["fatwa","Fatwas"],["khutbah","Sermons"],["transcript",
 function vLibrary(){
   return '<section class="sec"><div class="wrap">'
    +'<div class="sec-head r r1"><p class="eyebrow">Section one</p><h2>Written Works</h2>'
-   +'<p>Texts that carry a real written body. Anything flagged for legal review, or that breaks off before the Sheikh states his own position, is held back and listed under Held.</p></div>'
+   +'<p>Texts that carry a real written body. Those marked <em>no ruling given</em> break off before the Sheikh states his position and carry a warning \u2014 they are published for study, not as fatwas. Anything flagged for legal or editorial review is held back and listed under Held.</p></div>'
    +'<div class="controls r r2">'
      +'<label class="search"><span style="color:var(--ink-4)">⌕</span><input id="libQ" type="search" placeholder="Search titles, English or Arabic…"></label>'
      +'<div class="chips" id="libChips">'+TYPES.map(function(t){return '<button class="chip'+(S.libType===t[0]?" on":"")+'" data-t="'+t[0]+'">'+t[1]+'</button>'}).join("")+'</div>'
@@ -968,7 +1113,7 @@ function libRender(){
   var box=document.getElementById("libRows"); if(!box||!D.idx)return;
   var q=S.libQ.trim().toLowerCase();
   var list=D.idx.filter(function(a){
-    if(a.gate!=="open")return false;
+    if(a.gate!=="open"&&a.gate!=="partial")return false;
     if(S.libType!=="all"&&a.type!==S.libType)return false;
     if(!q)return true;
     return (a.title_en||"").toLowerCase().indexOf(q)>-1||(a.title_ar||"").indexOf(S.libQ.trim())>-1;
@@ -976,6 +1121,7 @@ function libRender(){
   if(!list.length){box.innerHTML='<p class="empty">Nothing matches that search.</p>';return}
   var h='<div class="rows">'+list.slice(0,S.libN).map(function(a){
     var b='<span class="badge draft">Draft</span>';
+    if(a.gate==="partial")b+='<span class="badge flagged">No ruling given</span>';
     if(a.excerpt)b+='<span class="badge">Excerpt only</span>';
     if(a.cms_date)b+='<span class="badge">Date unverified</span>';
     if(a.n_flags)b+='<span class="badge">'+a.n_flags+' note'+(a.n_flags>1?"s":"")+'</span>';
@@ -1067,15 +1213,14 @@ function airBind(){
 /* ---------- reader ---------- */
 function textRender(id,deepP){
   var box=document.getElementById("readerBox"); if(!box)return;
-  var a=(D.full||[]).filter(function(x){return String(x.id)===String(id)})[0];
+  var a=D.art[id];
   if(!a){
-    box.innerHTML='<button class="back" id="back">← All written works</button><div class="notice"><strong>Not available in this build.</strong> This record is either held for review or has no written body.</div>';
+    box.innerHTML='<button class="back" id="back">← All texts</button><div class="notice"><strong>Not published in this edition.</strong> This record is either held back pending review or has no written body. <a href="#/review">See what is held back and why</a>.</div>';
     var b0=document.getElementById("back"); if(b0)b0.addEventListener("click",function(){location.hash="#/library"});return}
-  var notice="";
-  if(a.source_is_excerpt_only)
-    notice+='<div class="notice"><strong>This page carries only an excerpt.</strong> The source publishes the opening and breaks off, with the remainder behind a separate document that has not been obtained. The English ends exactly where the Arabic ends.</div>';
-  if(a.date_is_cms_upload)
-    notice+='<div class="notice"><strong>The date shown is not the date of composition.</strong> The source serves a bulk-upload timestamp; several texts are demonstrably years older than their stamp.</div>';
+  var bn=(a.bn||[]).slice();
+  if(a.partial&&bn.indexOf("partial")<0)bn.push("partial");
+  if(a.source_is_excerpt_only&&bn.indexOf("excerpt")<0)bn.push("excerpt");
+  var notice=bannerHTML(bn,a.dec);
   var badges='<span class="badge draft">Unreviewed draft</span><span class="badge">'+esc((a.type||"text").replace("_"," "))+'</span>'
     +(a.chars_ar?'<span class="badge">'+n(a.chars_ar)+' Arabic characters</span>':"")
     +(a.category_en?'<span class="badge">'+esc(a.category_en)+'</span>':"")
@@ -1110,7 +1255,7 @@ function textRender(id,deepP){
     +'<button class="tbtn" id="ttsBtn">\u25B6 Read aloud</button></div></div>';
 
   var video=a.vid?'<div class="vid"><iframe src="https://www.youtube.com/embed/'+esc(a.vid)+'" title="Recording" allow="accelerometer; encrypted-media; picture-in-picture" allowfullscreen loading="lazy"></iframe></div>':"";
-  box.innerHTML='<button class="back" id="back">← All written works</button>'+notice
+  box.innerHTML='<button class="back" id="back">← All texts</button>'+notice
     +'<h1 class="r r1">'+esc(a.title_en||"Untitled")+'</h1>'
     +'<p class="reader-ar-title r r1">'+esc(a.title_ar||"")+'</p>'
     +'<div class="reader-meta r r2">'+badges+'</div>'
@@ -1126,6 +1271,7 @@ function textRender(id,deepP){
     +'</div><div id="relBox"></div>'
     +'<p style="margin-top:32px"><a href="'+esc(a.source_url||"#")+'" target="_blank" rel="noopener" style="font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--gold)">View the original on dedewnet.com ↗</a></p>';
   document.getElementById("back").addEventListener("click",function(){location.hash="#/library"});
+  bindNotes();
 
   /* reader preferences */
   var readerEl=box.closest(".reader");
@@ -1181,7 +1327,7 @@ function textRender(id,deepP){
   /* related texts, by category then by type */
   if(D.idx){
     var rel=D.idx.filter(function(x){
-      return x.gate==="open" && x.id!==a.id &&
+      return (x.gate==="open"||x.gate==="partial") && x.id!==a.id &&
         ((a.category_en && x.cat===a.category_en) || x.type===a.type);
     }).slice(0,5);
     if(rel.length){
@@ -1219,7 +1365,10 @@ function textRender(id,deepP){
 
 function textBind(id,deepP){
   var need=[];
-  if(!D.full)need.push(get("data/articles-full.json").then(function(j){D.full=j}));
+  /* one file per text rather than the whole corpus: opening a text used to pull
+     an 8.8MB blob down the wire before a single word appeared. */
+  if(!D.art[id])need.push(get("data/a/"+encodeURIComponent(id)+".json")
+    .then(function(j){D.art[id]=j}).catch(function(){D.art[id]=false}));
   if(!D.gloss)need.push(get("data/glossary.json").then(function(j){D.gloss=j}).catch(function(){}));
   if(!D.subj)need.push(get("data/subjects.json").then(function(j){D.subj=j}).catch(function(){}));
   if(!need.length)return textRender(id,deepP);
@@ -1289,7 +1438,7 @@ function vSubject(k){return '<section class="sec"><div class="wrap" id="oneSubj"
 function subjectRender(k){
   var box=document.getElementById("oneSubj"); if(!box||!D.idx||!D.subj)return;
   var label=(D.subj.labels||{})[k]||k;
-  var list=D.idx.filter(function(a){return a.gate==="open"&&(a.subj||[]).indexOf(k)>-1});
+  var list=D.idx.filter(function(a){return (a.gate==="open"||a.gate==="partial")&&(a.subj||[]).indexOf(k)>-1});
   box.innerHTML='<button class="back" id="back">\u2190 All subjects</button>'
    +'<div class="sec-head"><p class="eyebrow">Subject</p><h2>'+esc(label)+'</h2>'
    +'<p>'+list.length+' text'+(list.length===1?"":"s")+' where this is among the two strongest subjects.</p></div>'
@@ -1316,27 +1465,45 @@ function subjectBind(k){
 /* ---------- held ---------- */
 function vReview(){
   return '<section class="sec"><div class="wrap">'
-   +'<div class="sec-head r r1"><p class="eyebrow">Section four</p><h2>Held for Review</h2>'
-   +'<p>Translated, but deliberately kept out of the reading list. Their English is not served to this site at all — only the title and the reason. Each needs a decision from the Sheikh’s office, and in some cases legal advice, before it can be published in English.</p></div>'
+   +'<div class="sec-head r r1"><p class="eyebrow">About this edition</p><h2>For the Office to Decide</h2>'
+   +'<p>Nothing in this edition is withheld — all '+n(S_().total||958)+' records are here to read. But '+n(S_().decisions||27)+' of them raise a question that is not the translator’s to settle, and they are gathered here so the office can work through them in one pass. Each one links straight to the text.</p></div>'
    +'<div id="revBox" class="r r2"><p class="loading">Loading…</p></div></div></section>';
 }
 
+var HELD_KIND={
+ practice:"Rulings on practices restricted by law in some countries this will be read in",
+ violence:"Armed action, and named individuals under designation",
+ hate:"Passages that read differently in English than in their own genre",
+ org:"Named organisations with a contested legal status",
+ person:"Named living people",
+ discrim:"Rulings that turn on nationality"
+};
+var HELD_ORDER=["practice","violence","hate","org","person","discrim"];
+
 function revRender(){
   var box=document.getElementById("revBox"); if(!box||!D.held)return;
-  var legal=D.held.filter(function(h){return h.edit});
-  var ruling=D.held.filter(function(h){return !h.edit});
-  function rows(list){
-    return '<div class="rows">'+list.map(function(h){
-      return '<div class="row" style="cursor:default">'
-        +'<span class="row-kind">'+esc((h.type||"").replace("_"," "))+'</span>'
-        +'<span class="row-main"><span class="row-title">'+esc(h.title_en||"Untitled")+'</span>'
-        +'<p class="row-ar">'+esc(h.title_ar||"")+'</p>'
-        +'<span class="row-meta"><span class="badge flagged">'+(h.edit?"Legal / editorial":"Stops before the ruling")+'</span></span></span>'
-        +'<span class="row-side">#'+h.id+'</span></div>'}).join("")+'</div>';
-  }
-  box.innerHTML='<div class="notice warn"><strong>Why these are held.</strong> A text that states a scholarly disagreement and breaks off before the Sheikh gives his own view will be read as his ruling by anyone who does not know better. And a handful carry positions that, published in English without context, raise legal questions in the jurisdictions where this will be read. Faithfulness belongs in the file; the decision to publish belongs to the Sheikh’s office.</div>'
-   +'<h3 style="margin:30px 0 12px;font-size:22px">Flagged for legal or editorial decision — '+legal.length+'</h3>'+rows(legal)
-   +'<h3 style="margin:38px 0 12px;font-size:22px">Stops before the Sheikh gives his ruling — '+ruling.length+'</h3>'+rows(ruling);
+  var by={};
+  D.held.forEach(function(h){(by[h.kind||"other"]=by[h.kind||"other"]||[]).push(h)});
+  var keys=HELD_ORDER.filter(function(k){return by[k]}).concat(
+    Object.keys(by).filter(function(k){return HELD_ORDER.indexOf(k)<0}));
+  var out=keys.map(function(k){
+    return '<h3 style="margin:34px 0 4px;font-size:21px">'+esc(HELD_KIND[k]||k)+'</h3>'
+      +'<p class="row-ar" style="margin:0 0 12px;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-4)">'+by[k].length+' record'+(by[k].length>1?"s":"")+'</p>'
+      +'<div class="rows">'+by[k].map(function(h){
+        var href=h.open?('#/text/'+h.id):('#/onair');
+        return '<a class="row" href="'+href+'" style="text-decoration:none">'
+          +'<span class="row-kind">'+esc((h.type||"").replace("_"," "))+'</span>'
+          +'<span class="row-main"><span class="row-title">'+esc(h.title_en||"Untitled")+'</span>'
+          +'<p class="row-ar">'+esc(h.title_ar||"")+'</p>'
+          +(h.why?'<p class="row-why">'+esc(h.why)+'</p>':"")
+          +'</span><span class="row-side">'+(h.open?"Read \u2192":"#"+h.id)+'</span></a>'}).join("")+'</div>'
+  }).join("");
+  box.innerHTML='<div class="notice warn"><strong>This is a checklist, not a set of objections.</strong> '
+   +'Every record here is published in full and translated faithfully — nothing softened, nothing dropped. '
+   +'What each one needs is a reading by someone qualified and a decision about how it should appear in English once this edition stops being private. '
+   +'Some turn on how a passage will read to someone who does not know the genre; a few name living people. '
+   +'The reasons below are the translators’ own notes, kept so the office is not asked to guess what was flagged.</div>'
+   +out;
 }
 
 function revBind(){
@@ -1508,12 +1675,46 @@ function route(){
   if(page!=="text"){progOff();window.scrollTo(0,0)}
 }
 
+/* ---------- back to top ---------- */
+function initToTop(){
+  var btn=document.getElementById("toTop"); if(!btn)return;
+  var shown=false,tick=false;
+  function check(){
+    tick=false;
+    var y=window.pageYOffset||document.documentElement.scrollTop||0;
+    var want=y>700;
+    if(want!==shown){shown=want;btn.classList.toggle("show",want)}
+  }
+  window.addEventListener("scroll",function(){
+    if(tick)return; tick=true; window.requestAnimationFrame(check)},{passive:true});
+  btn.addEventListener("click",function(){
+    var soft=!window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    window.scrollTo({top:0,behavior:soft?"smooth":"auto"});
+    var h=document.querySelector("#view h1,#view h2"); if(h){h.setAttribute("tabindex","-1");h.focus({preventScroll:true})}
+  });
+  check();
+}
+
+/* ---------- counts beside the menu items ---------- */
+function navCounts(){
+  var st=S_(),map={texts:st.texts,subjects:(D.subj&&D.subj.classified)||null,
+    terms:(D.gloss&&D.gloss.terms&&D.gloss.terms.length)||141,
+    onair:st.onair,media:st.media,held:st.decisions||27,saved:BM.length};
+  [].forEach.call(document.querySelectorAll(".nav .nav-n"),function(e){
+    var v=map[e.getAttribute("data-n")];
+    e.textContent=(v==null||v===""||v===0)?"":n(v);
+  });
+}
+
 function boot(){
   get("data/stats.json").then(function(j){
-    D.stats=j;
+    D.stats=j; navCounts();
     if(!location.hash||location.hash==="#/"){route()}
   }).catch(function(){});
-  window.addEventListener("hashchange",route);
+  get("data/subjects.json").then(function(j){D.subj=j;navCounts()}).catch(function(){});
+  initToTop();
+  navCounts();
+  window.addEventListener("hashchange",function(){route();navCounts()});
   route();
 }
 })();
