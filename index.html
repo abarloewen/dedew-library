@@ -330,6 +330,47 @@ h3{font-size:19px;line-height:1.28;letter-spacing:-.01em}
 .glpop .fld{font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;
   color:var(--gold);margin-top:9px;display:block}
 
+/* ============ search overlay ============ */
+.srch{position:fixed;inset:0;z-index:150;background:color-mix(in srgb,var(--paper) 96%,transparent);
+  backdrop-filter:blur(6px);display:flex;flex-direction:column;
+  padding-top:calc(18px + env(safe-area-inset-top,0px))}
+.srch-bar{max-width:760px;width:100%;margin:0 auto;padding:0 20px;display:flex;gap:10px;align-items:center}
+.srch-bar input{flex:1;min-width:0;height:54px;font-size:17px;background:var(--surface);
+  border:1px solid var(--rule);border-radius:8px;padding:0 16px;color:var(--ink);font-family:inherit}
+.srch-bar input:focus{border-color:var(--gold);outline:none}
+.srch-res{max-width:760px;width:100%;margin:0 auto;padding:16px 20px 40px;overflow-y:auto;flex:1}
+.srch-hint{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--ink-4);margin:14px 0 10px}
+.sr{display:block;width:100%;text-align:start;background:none;border:0;border-bottom:1px solid var(--rule-2);
+  padding:14px 6px;cursor:pointer;font:inherit;color:inherit}
+.sr:hover,.sr:focus{background:var(--surface)}
+.sr b{display:block;font-family:var(--display);font-size:17.5px;font-weight:400;margin-bottom:3px}
+.sr .ctx{font-size:14px;color:var(--ink-3);line-height:1.5}
+.sr .ctx mark{background:var(--gold-wash);color:var(--ink);padding:0 2px;border-radius:2px}
+.sr .mt{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-4);margin-top:6px}
+
+/* ============ reading progress ============ */
+.prog{position:fixed;top:0;inset-inline-start:0;height:2px;background:var(--gold);z-index:70;width:0;
+  transition:width .1s linear}
+
+/* ============ bookmarks / actions ============ */
+.act{display:flex;gap:8px;flex-wrap:wrap;margin-top:26px;padding-top:20px;border-top:1px solid var(--rule-2)}
+.bm.on{background:var(--gold-wash);border-color:var(--gold);color:var(--gold)}
+.toast{position:fixed;inset-inline:0;bottom:calc(22px + env(safe-area-inset-bottom,0px));margin-inline:auto;
+  width:max-content;max-width:90vw;background:var(--ink);color:var(--paper);padding:11px 20px;border-radius:7px;
+  font-size:14px;z-index:180;animation:fade .2s var(--ease)}
+
+/* ============ related ============ */
+.rel{margin-top:38px;padding-top:24px;border-top:1px solid var(--rule)}
+.rel a{display:block;text-decoration:none;padding:12px 6px;border-bottom:1px solid var(--rule-2)}
+.rel a:hover{background:var(--surface)}
+.rel .t{font-family:var(--display);font-size:16.5px;line-height:1.3}
+.rel .m{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-4);margin-top:4px}
+
+/* paragraph deep-link target */
+.body-en p.target,.body-ar p.target{background:var(--gold-wash);
+  box-shadow:-3px 0 0 var(--gold);padding-inline-start:10px;margin-inline-start:-13px}
+
 /* ============ print ============ */
 @media print{
   .hdr,.foot,.rtools,.pane-toggle,.back,.glpop{display:none!important}
@@ -443,9 +484,11 @@ h3{font-size:19px;line-height:1.28;letter-spacing:-.01em}
       <a href="#/media">Lectures</a>
       <a href="#/review">Held</a>
       <a href="#/glossary">Glossary</a>
+      <a href="#/saved">Saved</a>
       <a href="#/method">Method</a>
     </nav>
     <div class="icons">
+      <button class="iconbtn" id="searchBtn" aria-label="Search" title="Search (press /)">⌕</button>
       <button class="iconbtn" id="themeBtn" aria-label="Toggle theme">◐</button>
       <button class="iconbtn burger" id="burger" aria-label="Open menu">☰</button>
     </div>
@@ -463,8 +506,7 @@ h3{font-size:19px;line-height:1.28;letter-spacing:-.01em}
 "use strict";
 var D={idx:null,full:null,held:null,onair:null,cats:null,media:null,gloss:null,stats:null};
 var S={libQ:"",libType:"all",libN:40,pane:"en",medQ:"",medType:"all",medN:60,airQ:"",airN:60};
-var ST={translated:674,texts:222,onair:142,held:310,corpus_written:957,corpus_with_text:555,
-        media:3473,media_cats:99,video:2162,audio:1309,flags:2226,excerpt:164};
+var ST={total:957,translated:957,texts:237,onair:401,held:319,corpus_written:958,corpus_with_text:557,media:3473,media_cats:99,video:2162,audio:1309,flags:2647,excerpt:164};
 
 function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
 function n(x){return (x==null?0:x).toLocaleString("en-US")}
@@ -510,6 +552,119 @@ function linkGlossary(html){
     return pre+'<button class="gl" data-t="'+esc(word.toLowerCase())+'">'+word+'</button>';
   });
 }
+/* ---------- bookmarks ---------- */
+var BM=[];
+try{var bj=localStorage.getItem("dedew-marks");if(bj)BM=JSON.parse(bj)||[]}catch(e){}
+function saveBM(){try{localStorage.setItem("dedew-marks",JSON.stringify(BM))}catch(e){}}
+function isMarked(id){return BM.indexOf(+id)>-1}
+function toggleMark(id){
+  id=+id;
+  var i=BM.indexOf(id);
+  if(i>-1){BM.splice(i,1)}else{BM.push(id)}
+  saveBM(); return i===-1;
+}
+
+/* ---------- toast ---------- */
+var toastT=null;
+function toast(msg){
+  var old=document.querySelector(".toast"); if(old)old.remove();
+  var el=document.createElement("div"); el.className="toast"; el.textContent=msg;
+  document.body.appendChild(el);
+  clearTimeout(toastT); toastT=setTimeout(function(){el.remove()},2300);
+}
+
+/* ---------- copy a passage with its citation ---------- */
+function copyCited(a){
+  var en=(a.body_en||"").trim(), ar=(a.body_ar||"").trim();
+  var txt=(a.title_en||"")+"\n"+(a.title_ar||"")+"\n\n"
+    +en+"\n\n---\n"+ar+"\n\n"
+    +"Sheikh Muhammad al-Hasan Ould al-Dedew al-Shinqiti\n"
+    +"English draft, unreviewed — the Arabic original is authoritative.\n"
+    +"Source: "+(a.source_url||"dedewnet.com");
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(txt).then(function(){toast("Copied with citation")},
+      function(){toast("Could not copy")});
+  }else{toast("Copying is not available in this browser")}
+}
+
+/* ---------- reading progress ---------- */
+var progEl=null;
+function progOn(){
+  if(!progEl){progEl=document.createElement("div");progEl.className="prog";document.body.appendChild(progEl)}
+  progEl.hidden=false; progUpdate();
+}
+function progOff(){if(progEl)progEl.hidden=true}
+function progUpdate(){
+  if(!progEl||progEl.hidden)return;
+  var h=document.documentElement.scrollHeight-window.innerHeight;
+  progEl.style.width=(h>0?Math.min(100,(window.scrollY/h)*100):0)+"%";
+}
+window.addEventListener("scroll",progUpdate,{passive:true});
+
+/* ---------- search ---------- */
+function openSearch(){
+  if(document.querySelector(".srch"))return;
+  var el=document.createElement("div");
+  el.className="srch";
+  el.innerHTML='<div class="srch-bar"><input id="sq" type="search" placeholder="Search the full text…" aria-label="Search">'
+    +'<button class="iconbtn" id="sclose" aria-label="Close search">✕</button></div>'
+    +'<div class="srch-res" id="sres"><p class="srch-hint">Searches the English of every readable text, and titles in both languages.</p></div>';
+  document.body.appendChild(el);
+  var input=el.querySelector("#sq");
+  input.focus();
+  el.querySelector("#sclose").addEventListener("click",closeSearch);
+  el.addEventListener("keydown",function(e){if(e.key==="Escape")closeSearch()});
+  var t=null;
+  input.addEventListener("input",function(){
+    clearTimeout(t); var q=input.value;
+    t=setTimeout(function(){runSearch(q)},180);
+  });
+  if(!D.search){
+    get("data/search.json").then(function(j){D.search=j;if(input.value.trim())runSearch(input.value)})
+     .catch(function(){document.getElementById("sres").innerHTML='<p class="empty">Search index could not be loaded.</p>'});
+  }
+}
+function closeSearch(){var e=document.querySelector(".srch");if(e)e.remove()}
+function runSearch(q){
+  var box=document.getElementById("sres"); if(!box)return;
+  q=(q||"").trim();
+  if(q.length<2){box.innerHTML='<p class="srch-hint">Type at least two characters.</p>';return}
+  if(!D.search){box.innerHTML='<p class="loading">Building the index…</p>';return}
+  var lq=q.toLowerCase(), hits=[];
+  for(var i=0;i<D.search.length&&hits.length<60;i++){
+    var r=D.search[i], where=-1, inTitle=false;
+    if((r.t||"").toLowerCase().indexOf(lq)>-1){inTitle=true}
+    else if((r.a||"").indexOf(q)>-1){inTitle=true}
+    else {where=(r.b||"").indexOf(lq)}
+    if(inTitle||where>-1)hits.push({r:r,where:where,inTitle:inTitle});
+  }
+  if(!hits.length){box.innerHTML='<p class="empty">Nothing found for “'+esc(q)+'”.</p>';return}
+  box.innerHTML='<p class="srch-hint">'+hits.length+(hits.length===60?"+":"")+' result'+(hits.length===1?"":"s")+'</p>'
+    +hits.map(function(h){
+      var ctx="";
+      if(h.where>-1){
+        var s=Math.max(0,h.where-70), e=Math.min(h.r.b.length,h.where+lq.length+90);
+        var frag=h.r.b.slice(s,e);
+        var rel=h.where-s;
+        ctx=(s>0?"…":"")+esc(frag.slice(0,rel))+"<mark>"+esc(frag.slice(rel,rel+lq.length))+"</mark>"
+           +esc(frag.slice(rel+lq.length))+(e<h.r.b.length?"…":"");
+      }
+      return '<button class="sr" data-id="'+h.r.i+'"><b>'+esc(h.r.t||"Untitled")+'</b>'
+        +(ctx?'<span class="ctx">'+ctx+'</span>':'<span class="ctx" style="font-family:var(--ar);direction:rtl;text-align:right;display:block">'+esc(h.r.a||"")+'</span>')
+        +'<span class="mt">'+(h.inTitle?"title match":"in the text")+'</span></button>'}).join("");
+  box.querySelectorAll(".sr").forEach(function(b){
+    b.addEventListener("click",function(){closeSearch();location.hash="#/text/"+b.dataset.id});
+  });
+}
+
+/* ---------- keyboard ---------- */
+document.addEventListener("keydown",function(e){
+  var tag=(e.target.tagName||"").toLowerCase();
+  if(tag==="input"||tag==="textarea")return;
+  if(e.key==="/"){e.preventDefault();openSearch()}
+  else if(e.key==="Escape"){closeSearch();closePop()}
+});
+
 function closePop(){var p=document.querySelector(".glpop");if(p)p.remove()}
 function openPop(btn){
   closePop();
@@ -560,6 +715,7 @@ document.getElementById("themeBtn").addEventListener("click",function(){
 });
 
 var nav=document.getElementById("nav");
+document.getElementById("searchBtn").addEventListener("click",openSearch);
 document.getElementById("burger").addEventListener("click",function(){nav.classList.add("open")});
 document.getElementById("navClose").addEventListener("click",function(){nav.classList.remove("open")});
 nav.addEventListener("click",function(e){if(e.target.tagName==="A")nav.classList.remove("open")});
@@ -588,16 +744,16 @@ function vHome(){
    +'<h1 class="r r2">The written works of Sheikh Muhammad al-Hasan Ould al-Dedew, in English</h1>'
    +'<p class="lede r r3">A bilingual edition of the Mauritanian scholar’s fatwas, sermons, essays and lecture transcripts — each English draft set beside the Arabic it came from, and every uncertain rendering recorded rather than quietly resolved.</p>'
    +'<div class="statrow r r4">'
-     +'<div class="stat"><b data-count="'+(s.translated||674)+'">0</b><span>Records translated</span></div>'
-     +'<div class="stat"><b data-count="'+(s.texts||222)+'">0</b><span>Texts readable</span></div>'
+     +'<div class="stat"><b data-count="'+(s.total||957)+'">0</b><span>Records translated</span></div>'
+     +'<div class="stat"><b data-count="'+(s.texts||237)+'">0</b><span>Texts readable</span></div>'
      +'<div class="stat"><b data-count="'+(s.media||3473)+'">0</b><span>Recorded lectures</span></div>'
-     +'<div class="stat"><b data-count="'+(s.flags||2226)+'">0</b><span>Translator’s notes</span></div>'
+     +'<div class="stat"><b data-count="'+(s.flags||2647)+'">0</b><span>Translator’s notes</span></div>'
    +'</div></div></section>'
    +'<section class="sec"><div class="wrap"><div class="entries r r5">'
-     +'<a class="entry" href="#/library"><span class="n">01</span><h3>Written Works</h3><p>'+n(s.texts||222)+' texts with a real written body — English beside the Arabic, with the translator’s open questions kept in view.</p></a>'
-     +'<a class="entry" href="#/onair"><span class="n">02</span><h3>Answered On Air</h3><p>'+n(s.onair||142)+' questions the Sheikh answered aloud. The question is translated; the answer lives only in the recording.</p></a>'
+     +'<a class="entry" href="#/library"><span class="n">01</span><h3>Written Works</h3><p>'+n(s.texts||237)+' texts with a real written body — English beside the Arabic, with the translator’s open questions kept in view.</p></a>'
+     +'<a class="entry" href="#/onair"><span class="n">02</span><h3>Answered On Air</h3><p>'+n(s.onair||401)+' questions the Sheikh answered aloud. The question is translated; the answer lives only in the recording.</p></a>'
      +'<a class="entry" href="#/media"><span class="n">03</span><h3>Recorded Lectures</h3><p>'+n(s.media||3473)+' recordings across '+n(s.media_cats||99)+' subjects, every category named in English.</p></a>'
-     +'<a class="entry" href="#/review"><span class="n">04</span><h3>Held for Review</h3><p>'+n(s.held||310)+' texts kept out of the reading list. Their English is not served to this site at all.</p></a>'
+     +'<a class="entry" href="#/review"><span class="n">04</span><h3>Held for Review</h3><p>'+n(s.held||319)+' texts kept out of the reading list. Their English is not served to this site at all.</p></a>'
    +'</div></div></section>';
 }
 
@@ -660,7 +816,7 @@ function vOnAir(){
   var s=S_();
   return '<section class="sec"><div class="wrap">'
    +'<div class="sec-head r r1"><p class="eyebrow">Section two</p><h2>Answered On Air</h2>'
-   +'<p>'+n(s.onair||142)+' questions put to the Sheikh that he answered aloud. The source publishes the question and a recording — no written answer exists, so none is shown. The question is translated; the answer is in the audio.</p></div>'
+   +'<p>'+n(s.onair||401)+' questions put to the Sheikh that he answered aloud. The source publishes the question and a recording — no written answer exists, so none is shown. The question is translated; the answer is in the audio.</p></div>'
    +'<div class="controls r r2"><label class="search"><span style="color:var(--ink-4)">⌕</span>'
    +'<input id="airQ" type="search" placeholder="Search questions…"></label></div>'
    +'<div id="airRows" class="r r3"><p class="loading">Loading…</p></div></div></section>';
@@ -695,7 +851,7 @@ function airBind(){
 }
 
 /* ---------- reader ---------- */
-function textRender(id){
+function textRender(id,deepP){
   var box=document.getElementById("readerBox"); if(!box)return;
   var a=(D.full||[]).filter(function(x){return String(x.id)===String(id)})[0];
   if(!a){
@@ -740,6 +896,11 @@ function textRender(id){
       +'<div class="page" id="pgEn"><p class="page-label">English — draft</p><div class="body-en">'+linkGlossary(parasNum(a.body_en,"en"))+'</div></div>'
       +'<div class="page" id="pgAr"><p class="page-label">العربية — الأصل</p><div class="body-ar">'+parasNum(a.body_ar,"ar")+'</div></div>'
     +'</div>'+fh
+    +'<div class="act">'
+      +'<button class="tbtn bm'+(isMarked(a.id)?" on":"")+'" id="bmBtn">'+(isMarked(a.id)?"★ Saved":"☆ Save")+'</button>'
+      +'<button class="tbtn" id="copyBtn">Copy with citation</button>'
+      +'<button class="tbtn" id="linkBtn">Copy link</button>'
+    +'</div><div id="relBox"></div>'
     +'<p style="margin-top:32px"><a href="'+esc(a.source_url||"#")+'" target="_blank" rel="noopener" style="font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--gold)">View the original on dedewnet.com ↗</a></p>';
   document.getElementById("back").addEventListener("click",function(){location.hash="#/library"});
 
@@ -764,6 +925,48 @@ function textRender(id){
     savePref(); applyPref();
   });
 
+  /* save / copy / link */
+  var bmBtn=document.getElementById("bmBtn");
+  bmBtn.addEventListener("click",function(){
+    var on=toggleMark(a.id);
+    bmBtn.classList.toggle("on",on);
+    bmBtn.textContent=on?"★ Saved":"☆ Save";
+    toast(on?"Saved to your list":"Removed from your list");
+  });
+  document.getElementById("copyBtn").addEventListener("click",function(){copyCited(a)});
+  document.getElementById("linkBtn").addEventListener("click",function(){
+    var u=location.origin+location.pathname+"#/text/"+a.id;
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(u).then(function(){toast("Link copied")},function(){toast("Could not copy")});
+    }else{toast("Copying is not available in this browser")}
+  });
+
+  /* related texts, by category then by type */
+  if(D.idx){
+    var rel=D.idx.filter(function(x){
+      return x.gate==="open" && x.id!==a.id &&
+        ((a.category_en && x.cat===a.category_en) || x.type===a.type);
+    }).slice(0,5);
+    if(rel.length){
+      document.getElementById("relBox").innerHTML='<div class="rel"><p class="eyebrow">Related</p>'
+        +rel.map(function(x){return '<a href="#/text/'+x.id+'"><span class="t">'+esc(x.title_en||"Untitled")+'</span>'
+          +'<span class="m">'+esc((x.type||"").replace("_"," "))+(x.cat?" · "+esc(x.cat):"")+'</span></a>'}).join("")
+        +'</div>';
+    }
+  }
+
+  /* reading progress for long texts */
+  if((a.chars_ar||0)>3000)progOn(); else progOff();
+
+  /* deep link to a paragraph: #/text/<id>/p<n> */
+  if(deepP){
+    var tp=box.querySelector('.body-en p[data-p="'+deepP+'"]')||box.querySelector('[data-p="'+deepP+'"]');
+    if(tp){
+      box.querySelectorAll('[data-p="'+deepP+'"]').forEach(function(x){x.classList.add("target")});
+      setTimeout(function(){tp.scrollIntoView({behavior:"smooth",block:"center"})},220);
+    }
+  }
+
   /* pair the two columns: touching a paragraph highlights its counterpart */
   box.querySelectorAll("[data-p]").forEach(function(p){
     function mark(on){
@@ -777,13 +980,40 @@ function textRender(id){
   window.scrollTo(0,0);
 }
 
-function textBind(id){
+function textBind(id,deepP){
   var need=[];
   if(!D.full)need.push(get("data/articles-full.json").then(function(j){D.full=j}));
   if(!D.gloss)need.push(get("data/glossary.json").then(function(j){D.gloss=j}).catch(function(){}));
-  if(!need.length)return textRender(id);
-  Promise.all(need).then(function(){textRender(id)})
+  if(!need.length)return textRender(id,deepP);
+  Promise.all(need).then(function(){textRender(id,deepP)})
    .catch(function(){document.getElementById("readerBox").innerHTML='<p class="empty">The text could not be loaded.</p>'});
+}
+
+/* ---------- saved ---------- */
+function vSaved(){
+  return '<section class="sec"><div class="wrap">'
+   +'<div class="sec-head r r1"><p class="eyebrow">Your list</p><h2>Saved</h2>'
+   +'<p>Texts you have marked while reading. This list lives in this browser only — it is not shared and does not leave your device.</p></div>'
+   +'<div id="savedBox" class="r r2"><p class="loading">Loading…</p></div></div></section>';
+}
+function savedRender(){
+  var box=document.getElementById("savedBox"); if(!box||!D.idx)return;
+  if(!BM.length){box.innerHTML='<p class="empty">Nothing saved yet. Open a text and press Save.</p>';return}
+  var list=D.idx.filter(function(a){return BM.indexOf(a.id)>-1});
+  if(!list.length){box.innerHTML='<p class="empty">Your saved texts are not in this build.</p>';return}
+  box.innerHTML='<div class="rows">'+list.map(function(a){
+    return '<button class="row" data-id="'+a.id+'">'
+      +'<span class="row-kind">'+esc((a.type||"").replace("_"," "))+'</span>'
+      +'<span class="row-main"><span class="row-title">'+esc(a.title_en||"Untitled")+'</span>'
+      +'<p class="row-ar">'+esc(a.title_ar||"")+'</p></span>'
+      +'<span class="row-side">'+n(a.chars_ar)+' ch</span></button>'}).join("")+'</div>';
+  box.querySelectorAll(".row").forEach(function(r){
+    r.addEventListener("click",function(){location.hash="#/text/"+r.dataset.id})});
+}
+function savedBind(){
+  if(D.idx)return savedRender();
+  get("data/articles-index.json").then(function(j){D.idx=j;savedRender()})
+   .catch(function(){document.getElementById("savedBox").innerHTML='<p class="empty">Could not load.</p>'});
 }
 
 /* ---------- held ---------- */
@@ -947,7 +1177,7 @@ function vMethod(){
   +'<ul><li><strong>wājib / farḍ</strong> — obligatory</li><li><strong>mandūb / mustaḥabb</strong> — recommended</li><li><strong>mubāḥ</strong> — permissible</li><li><strong>makrūh</strong> — disliked, never “forbidden”</li><li><strong>ḥarām</strong> — forbidden, never “discouraged”</li></ul>'
   +'<p>Terms of rational modality in creed are exempt: <em>wājib</em> said of God means necessarily true, not obligatory. Applying the legal table there makes nonsense of a creedal passage.</p>'
   +'<h3>What a translator may not do</h3>'
-  +'<p>Resolve a question the Sheikh left open. Soften or strengthen a ruling. Add reasoning he did not give. Silently repair an apparent error in the source. Where the Arabic is genuinely ambiguous the uncertainty is recorded as a note carrying two or three candidate renderings — <strong>'+n(s.flags||2226)+' such notes</strong> across the texts translated so far.</p>'
+  +'<p>Resolve a question the Sheikh left open. Soften or strengthen a ruling. Add reasoning he did not give. Silently repair an apparent error in the source. Where the Arabic is genuinely ambiguous the uncertainty is recorded as a note carrying two or three candidate renderings — <strong>'+n(s.flags||2647)+' such notes</strong> across the texts translated so far.</p>'
   +'<h3>Review states</h3>'
   +'<ul><li><strong>Unreviewed draft</strong> — translated, not yet checked. Everything here is at this stage.</li>'
   +'<li><strong>Checked</strong> — read against the Arabic by Ummah Collective.</li>'
@@ -964,14 +1194,16 @@ function route(){
   nav.querySelectorAll("a").forEach(function(a){a.classList.toggle("on",a.getAttribute("href")==="#/"+page)});
   if(page==="library"){view.innerHTML=vLibrary();libBind()}
   else if(page==="onair"){view.innerHTML=vOnAir();airBind()}
-  else if(page==="text"){view.innerHTML='<section class="reader"><div class="wrap" id="readerBox"><p class="loading">Loading the text…</p></div></section>';textBind(p[1])}
+  else if(page==="text"){view.innerHTML='<section class="reader"><div class="wrap" id="readerBox"><p class="loading">Loading the text…</p></div></section>';
+    var dp=(p[2]&&/^p\d+$/.test(p[2]))?p[2].slice(1):null; textBind(p[1],dp)}
   else if(page==="media"){view.innerHTML=vMedia();medBind()}
   else if(page==="lectures"){view.innerHTML='<section class="sec"><div class="wrap" id="catView"><p class="loading">Loading recordings…</p></div></section>';catBind(p[1])}
+  else if(page==="saved"){view.innerHTML=vSaved();savedBind()}
   else if(page==="review"){view.innerHTML=vReview();revBind()}
   else if(page==="glossary"){view.innerHTML=vGloss();glBind()}
   else if(page==="method"){view.innerHTML=vMethod()}
   else{view.innerHTML=vHome();countUp()}
-  if(page!=="text")window.scrollTo(0,0);
+  if(page!=="text"){progOff();window.scrollTo(0,0)}
 }
 
 function boot(){
