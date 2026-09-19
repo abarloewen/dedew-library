@@ -5,12 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light dark">
 <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
-<meta name="description" content="Private review build. English edition in preparation.">
 <title>Dedew Library</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200;0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,300;1,6..72,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200;0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,300;1,6..72,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Amiri:ital,wght@0,400;0,700;1,400&family=Noto+Naskh+Arabic:wght@400;600&family=Scheherazade+New:wght@400;600&display=swap">
 
 <style>
 :root{
@@ -371,6 +370,63 @@ h3{font-size:19px;line-height:1.28;letter-spacing:-.01em}
 .body-en p.target,.body-ar p.target{background:var(--gold-wash);
   box-shadow:-3px 0 0 var(--gold);padding-inline-start:10px;margin-inline-start:-13px}
 
+/* ============ sepia reading theme ============ */
+:root[data-theme="sepia"]{
+  --paper:#EFE6D4; --paper-2:#F6EFE0; --surface:#F7F1E3; --surface-2:#E3D8C0;
+  --ink:#2B2419; --ink-2:#4E4535; --ink-3:#756A55; --ink-4:#9A8F79;
+  --rule:#D6C9AC; --rule-2:#E4DAC4;
+  --gold:#8A5F1E; --gold-wash:#EDE0C4;
+  --teal:#2A5E4A; --teal-wash:#DDE8DE;
+  --rust:#8C3A20; --rust-wash:#F0DDD2;
+}
+
+/* ============ arabic typography controls ============ */
+.reader[data-arfont="naskh"] .body-ar,.reader[data-arfont="naskh"] .reader-ar-title{font-family:"Noto Naskh Arabic","Amiri",serif}
+.reader[data-arfont="sheher"] .body-ar,.reader[data-arfont="sheher"] .reader-ar-title{font-family:"Scheherazade New","Amiri",serif}
+
+/* ============ command palette ============ */
+.pal-sec{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--gold);margin:18px 0 8px}
+.sr .kbd{font-family:var(--mono);font-size:9.5px;color:var(--ink-4);border:1px solid var(--rule);
+  border-radius:3px;padding:1px 5px;margin-inline-start:8px}
+.srch-bar .hintk{font-family:var(--mono);font-size:10px;color:var(--ink-4);white-space:nowrap}
+@media (max-width:560px){.srch-bar .hintk{display:none}}
+.sr[aria-selected="true"]{background:var(--surface);box-shadow:inset 2px 0 0 var(--gold)}
+
+/* ============ inline recording on a question ============ */
+.vid{background:#000;border-radius:8px;overflow:hidden;margin:0 0 20px;aspect-ratio:16/9;max-width:100%}
+.vid iframe{width:100%;height:100%;border:0;display:block}
+
+/* ============ read aloud ============ */
+.speaking{background:var(--gold-wash);box-shadow:-3px 0 0 var(--gold)}
+
+/* ============ concordance ============ */
+.conc{margin-top:8px}
+.conc-line{display:block;width:100%;text-align:start;background:none;border:0;
+  border-bottom:1px solid var(--rule-2);padding:12px 6px;cursor:pointer;font:inherit;color:inherit}
+.conc-line:hover{background:var(--surface)}
+.conc-line .src{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--ink-4);display:block;margin-bottom:4px}
+.conc-line .kw{font-size:14.5px;color:var(--ink-2);line-height:1.55}
+.conc-line .kw mark{background:var(--gold-wash);color:var(--ink);padding:0 2px;border-radius:2px}
+
+/* ============ subjects ============ */
+.subjgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:0;border-top:1px solid var(--rule)}
+.subj{background:none;border:0;border-inline-end:1px solid var(--rule);border-bottom:1px solid var(--rule);
+  padding:22px;cursor:pointer;text-align:start;position:relative;transition:background .22s;font:inherit;color:inherit;
+  display:flex;flex-direction:column;gap:6px;min-height:120px}
+.subj::before{content:"";position:absolute;inset-inline-start:0;top:0;bottom:-1px;width:2px;background:var(--gold);
+  transform:scaleY(0);transform-origin:top;transition:transform .3s var(--ease)}
+.subj:hover{background:var(--surface)}
+.subj:hover::before{transform:scaleY(1)}
+.subj .nm{font-family:var(--display);font-size:19px;line-height:1.2}
+.subj .ct{font-family:var(--mono);font-size:10px;letter-spacing:.13em;color:var(--ink-4);margin-top:auto}
+.subj .bar{height:2px;background:var(--rule);margin-top:9px;position:relative;overflow:hidden}
+.subj .bar i{position:absolute;inset-block:0;inset-inline-start:0;background:var(--gold);display:block}
+.tag{display:inline-flex;font-family:var(--mono);font-size:9.5px;letter-spacing:.09em;text-transform:uppercase;
+  padding:4px 9px;border-radius:3px;border:1px solid color-mix(in srgb,var(--teal) 34%,transparent);
+  color:var(--teal);background:var(--teal-wash);white-space:nowrap;text-decoration:none}
+
 /* ============ print ============ */
 @media print{
   .hdr,.foot,.rtools,.pane-toggle,.back,.glpop{display:none!important}
@@ -480,6 +536,7 @@ h3{font-size:19px;line-height:1.28;letter-spacing:-.01em}
     <nav class="nav" id="nav">
       <button class="iconbtn nav-close" id="navClose" aria-label="Close menu">✕</button>
       <a href="#/library">Written Works</a>
+      <a href="#/subjects">Subjects</a>
       <a href="#/onair">On Air</a>
       <a href="#/media">Lectures</a>
       <a href="#/review">Held</a>
@@ -514,8 +571,26 @@ function paras(t){if(!t)return "";return String(t).split(/\n{2,}/).map(function(
 function get(p){return fetch(p).then(function(r){if(!r.ok)throw new Error(p);return r.json()})}
 function S_(){return D.stats||ST}
 
+/* Arabic normalisation: strip diacritics and tatweel, fold alef/ya/ta-marbuta
+   so a query typed without vowels matches vocalised text. Mirrors the build script. */
+var TASH=/[\u064B-\u0652\u0670\u0640]/g;
+function normAr(t){
+  if(!t)return "";
+  return String(t).replace(TASH,"")
+    .replace(/[\u0622\u0623\u0625\u0671]/g,"\u0627")
+    .replace(/\u0649/g,"\u064A").replace(/\u0629/g,"\u0647")
+    .replace(/[\u0624\u0626]/g,"\u0621")
+    .replace(/\s+/g," ").trim();
+}
+function hasArabic(s){return /[\u0600-\u06FF]/.test(s||"")}
+/* fold macrons and dots so a query typed on a plain keyboard finds the diacritic form */
+function normLat(s){
+  return String(s||"").normalize("NFD").replace(/[\u0300-\u036F]/g,"")
+    .replace(/[\u02BF\u02BE\u2018\u2019']/g,"").toLowerCase().trim();
+}
+
 /* ---------- reader preferences ---------- */
-var PREF={size:"m",view:(window.innerWidth<920?"en":"both")};
+var PREF={size:"m",view:(window.innerWidth<920?"en":"both"),tash:true,arfont:"amiri"};
 try{var pj=localStorage.getItem("dedew-read");if(pj)PREF=JSON.parse(pj)}catch(e){}
 function savePref(){try{localStorage.setItem("dedew-read",JSON.stringify(PREF))}catch(e){}}
 
@@ -601,6 +676,80 @@ function progUpdate(){
 }
 window.addEventListener("scroll",progUpdate,{passive:true});
 
+/* ---------- read aloud ---------- */
+var TTS={on:false,btn:null};
+function speakStop(){
+  try{window.speechSynthesis.cancel()}catch(e){}
+  document.querySelectorAll(".speaking").forEach(function(x){x.classList.remove("speaking")});
+  TTS.on=false;
+  if(TTS.btn){TTS.btn.textContent="\u25B6 Read aloud";TTS.btn.classList.remove("on")}
+}
+function speakToggle(btn,a){
+  if(!("speechSynthesis" in window)){toast("This browser cannot read aloud");return}
+  if(TTS.on){speakStop();return}
+  var ps=[].slice.call(document.querySelectorAll(".body-en p"));
+  if(!ps.length){toast("Nothing to read here");return}
+  TTS.on=true; TTS.btn=btn;
+  btn.textContent="\u25A0 Stop"; btn.classList.add("on");
+  var i=0;
+  function next(){
+    if(!TTS.on||i>=ps.length){speakStop();return}
+    var el=ps[i];
+    document.querySelectorAll(".speaking").forEach(function(x){x.classList.remove("speaking")});
+    el.classList.add("speaking");
+    if(i>0)el.scrollIntoView({behavior:"smooth",block:"center"});
+    var u=new SpeechSynthesisUtterance(el.textContent);
+    u.lang="en-GB"; u.rate=0.98;
+    u.onend=function(){i++;next()};
+    u.onerror=function(){i++;next()};
+    try{window.speechSynthesis.speak(u)}catch(e){speakStop()}
+  }
+  next();
+}
+window.addEventListener("hashchange",speakStop);
+
+/* ---------- concordance: every occurrence of a term across the corpus ---------- */
+function vTerm(tr){
+  return '<section class="sec"><div class="wrap" id="termBox"><p class="loading">Loading\u2026</p></div></section>';
+}
+function termRender(tr){
+  var box=document.getElementById("termBox"); if(!box)return;
+  var t=null;
+  if(D.gloss)D.gloss.terms.forEach(function(x){if(normLat(x.tr)===normLat(tr))t=x});
+  var lq=(t?t.tr:tr).toLowerCase(), lines=[];
+  (D.search||[]).forEach(function(r){
+    var src=r.b||"", from=0, n=0;
+    while(n<3){
+      var w=src.indexOf(lq,from); if(w<0)break;
+      var st=Math.max(0,w-80), en=Math.min(src.length,w+lq.length+100);
+      lines.push({id:r.i,title:r.t,pre:src.slice(st,w),hit:src.slice(w,w+lq.length),post:src.slice(w+lq.length,en),
+                  lead:st>0,trail:en<src.length});
+      from=w+lq.length; n++;
+    }
+  });
+  box.innerHTML='<button class="back" id="back">\u2190 Glossary</button>'
+   +'<div class="sec-head"><p class="eyebrow">Concordance</p>'
+   +'<h2>'+esc(t?t.en:tr)+'</h2>'
+   +(t?'<p style="font-family:var(--ar);direction:rtl;text-align:right;font-size:22px;margin:10px 0 0">'+esc(t.ar)+'</p>':"")
+   +(t&&t.note?'<p>'+esc(t.note)+'</p>':"")
+   +'<p>'+(lines.length?lines.length+' occurrence'+(lines.length===1?"":"s")+' across the readable texts, in context.':'No occurrences in the readable texts. It may appear in a held record.')+'</p></div>'
+   +'<div class="conc">'+lines.map(function(l){
+      return '<button class="conc-line" data-id="'+l.id+'"><span class="src">'+esc(l.title||("#"+l.id))+'</span>'
+        +'<span class="kw">'+(l.lead?"\u2026":"")+esc(l.pre)+'<mark>'+esc(l.hit)+'</mark>'+esc(l.post)+(l.trail?"\u2026":"")+'</span></button>'
+    }).join("")+'</div>';
+  document.getElementById("back").addEventListener("click",function(){location.hash="#/glossary"});
+  box.querySelectorAll(".conc-line").forEach(function(b){
+    b.addEventListener("click",function(){location.hash="#/text/"+b.dataset.id})});
+}
+function termBind(tr){
+  var need=[];
+  if(!D.gloss)need.push(get("data/glossary.json").then(function(j){D.gloss=j}));
+  if(!D.search)need.push(get("data/search.json").then(function(j){D.search=j}));
+  if(!need.length)return termRender(tr);
+  Promise.all(need).then(function(){termRender(tr)})
+   .catch(function(){document.getElementById("termBox").innerHTML='<p class="empty">Could not load.</p>'});
+}
+
 /* ---------- search ---------- */
 function openSearch(){
   if(document.querySelector(".srch"))return;
@@ -608,17 +757,21 @@ function openSearch(){
   el.className="srch";
   el.innerHTML='<div class="srch-bar"><input id="sq" type="search" placeholder="Search the full text…" aria-label="Search">'
     +'<button class="iconbtn" id="sclose" aria-label="Close search">✕</button></div>'
-    +'<div class="srch-res" id="sres"><p class="srch-hint">Searches the English of every readable text, and titles in both languages.</p></div>';
+    +'<div class="srch-res" id="sres"></div>';
   document.body.appendChild(el);
   var input=el.querySelector("#sq");
+  document.getElementById("sres").innerHTML=palHome();
+  bindPal(document.getElementById("sres"));
   input.focus();
   el.querySelector("#sclose").addEventListener("click",closeSearch);
+  el.addEventListener("click",function(e){if(e.target===el)closeSearch()});
   el.addEventListener("keydown",function(e){if(e.key==="Escape")closeSearch()});
   var t=null;
   input.addEventListener("input",function(){
     clearTimeout(t); var q=input.value;
     t=setTimeout(function(){runSearch(q)},180);
   });
+  if(!D.gloss)get("data/glossary.json").then(function(j){D.gloss=j}).catch(function(){});
   if(!D.search){
     get("data/search.json").then(function(j){D.search=j;if(input.value.trim())runSearch(input.value)})
      .catch(function(){document.getElementById("sres").innerHTML='<p class="empty">Search index could not be loaded.</p>'});
@@ -628,40 +781,80 @@ function closeSearch(){var e=document.querySelector(".srch");if(e)e.remove()}
 function runSearch(q){
   var box=document.getElementById("sres"); if(!box)return;
   q=(q||"").trim();
-  if(q.length<2){box.innerHTML='<p class="srch-hint">Type at least two characters.</p>';return}
-  if(!D.search){box.innerHTML='<p class="loading">Building the index…</p>';return}
-  var lq=q.toLowerCase(), hits=[];
+  if(q.length<2){box.innerHTML=palHome();bindPal(box);return}
+  if(!D.search){box.innerHTML='<p class="loading">Building the index\u2026</p>';return}
+  var ar=hasArabic(q), lq=ar?normAr(q):q.toLowerCase(), hits=[];
   for(var i=0;i<D.search.length&&hits.length<60;i++){
-    var r=D.search[i], where=-1, inTitle=false;
-    if((r.t||"").toLowerCase().indexOf(lq)>-1){inTitle=true}
-    else if((r.a||"").indexOf(q)>-1){inTitle=true}
-    else {where=(r.b||"").indexOf(lq)}
-    if(inTitle||where>-1)hits.push({r:r,where:where,inTitle:inTitle});
+    var r=D.search[i], where=-1, inTitle=false, field=null;
+    if(ar){
+      if((r.a||"").indexOf(lq)>-1){inTitle=true;field="a"}
+      else {where=(r.r||"").indexOf(lq); field="r"}
+    }else{
+      if((r.t||"").toLowerCase().indexOf(lq)>-1){inTitle=true;field="t"}
+      else {where=(r.b||"").indexOf(lq); field="b"}
+    }
+    if(inTitle||where>-1)hits.push({r:r,where:where,inTitle:inTitle,field:field});
   }
-  if(!hits.length){box.innerHTML='<p class="empty">Nothing found for “'+esc(q)+'”.</p>';return}
-  box.innerHTML='<p class="srch-hint">'+hits.length+(hits.length===60?"+":"")+' result'+(hits.length===1?"":"s")+'</p>'
-    +hits.map(function(h){
-      var ctx="";
-      if(h.where>-1){
-        var s=Math.max(0,h.where-70), e=Math.min(h.r.b.length,h.where+lq.length+90);
-        var frag=h.r.b.slice(s,e);
-        var rel=h.where-s;
-        ctx=(s>0?"…":"")+esc(frag.slice(0,rel))+"<mark>"+esc(frag.slice(rel,rel+lq.length))+"</mark>"
-           +esc(frag.slice(rel+lq.length))+(e<h.r.b.length?"…":"");
+  // glossary matches, so a term search reaches the concordance
+  var gl=[];
+  if(D.gloss){
+    gl=D.gloss.terms.filter(function(t){
+      return ar ? normAr(t.ar||"").indexOf(lq)>-1
+                : (normLat(t.tr).indexOf(normLat(lq))>-1||normLat(t.en).indexOf(normLat(lq))>-1);
+    }).slice(0,4);
+  }
+  var h="";
+  if(gl.length){
+    h+='<p class="pal-sec">Glossary</p>'+gl.map(function(t){
+      return '<button class="sr" data-term="'+esc(t.tr)+'"><b>'+esc(t.en)+'</b>'
+        +'<span class="ctx" style="font-family:var(--ar);direction:rtl;text-align:right;display:block">'+esc(t.ar)+'</span>'
+        +'<span class="mt">see every occurrence in the corpus</span></button>'}).join("");
+  }
+  if(!hits.length&&!gl.length){box.innerHTML='<p class="empty">Nothing found for \u201c'+esc(q)+'\u201d.</p>';return}
+  if(hits.length){
+    h+='<p class="pal-sec">'+hits.length+(hits.length===60?"+":"")+' text'+(hits.length===1?"":"s")+'</p>'
+    +hits.map(function(x){
+      var ctx="", rtl=(x.field==="a"||x.field==="r");
+      if(x.where>-1){
+        var src=x.r[x.field]||"";
+        var st=Math.max(0,x.where-70), en=Math.min(src.length,x.where+lq.length+90);
+        var frag=src.slice(st,en), rel=x.where-st;
+        ctx=(st>0?"\u2026":"")+esc(frag.slice(0,rel))+"<mark>"+esc(frag.slice(rel,rel+lq.length))+"</mark>"
+           +esc(frag.slice(rel+lq.length))+(en<src.length?"\u2026":"");
       }
-      return '<button class="sr" data-id="'+h.r.i+'"><b>'+esc(h.r.t||"Untitled")+'</b>'
-        +(ctx?'<span class="ctx">'+ctx+'</span>':'<span class="ctx" style="font-family:var(--ar);direction:rtl;text-align:right;display:block">'+esc(h.r.a||"")+'</span>')
-        +'<span class="mt">'+(h.inTitle?"title match":"in the text")+'</span></button>'}).join("");
-  box.querySelectorAll(".sr").forEach(function(b){
-    b.addEventListener("click",function(){closeSearch();location.hash="#/text/"+b.dataset.id});
-  });
+      return '<button class="sr" data-id="'+x.r.i+'"><b>'+esc(x.r.t||"Untitled")+'</b>'
+        +(ctx?'<span class="ctx"'+(rtl?' style="font-family:var(--ar);direction:rtl;text-align:right;display:block"':'')+'>'+ctx+'</span>':"")
+        +'<span class="mt">'+(x.inTitle?"title match":(rtl?"in the Arabic":"in the English"))+'</span></button>'}).join("");
+  }
+  box.innerHTML=h; bindPal(box);
+}
+
+/* command palette: the empty state offers jumps, not a blank page */
+function palHome(){
+  var views=[["#/library","Written Works"],["#/subjects","Subjects"],["#/onair","Answered On Air"],["#/media","Recorded Lectures"],
+             ["#/review","Held for Review"],["#/glossary","Glossary"],["#/saved","Saved"],["#/method","Method"]];
+  return '<p class="pal-sec">Go to</p>'+views.map(function(v){
+    return '<button class="sr" data-go="'+v[0]+'"><b>'+v[1]+'</b></button>'}).join("")
+   +'<p class="pal-sec">Tips</p><button class="sr" disabled><span class="ctx">'
+   +'Type in Arabic or English. Arabic matches without diacritics. Search a glossary term to see every place it appears.'
+   +'</span></button>';
+}
+function bindPal(box){
+  box.querySelectorAll(".sr[data-id]").forEach(function(b){
+    b.addEventListener("click",function(){closeSearch();location.hash="#/text/"+b.dataset.id})});
+  box.querySelectorAll(".sr[data-go]").forEach(function(b){
+    b.addEventListener("click",function(){closeSearch();location.hash=b.dataset.go})});
+  box.querySelectorAll(".sr[data-term]").forEach(function(b){
+    b.addEventListener("click",function(){closeSearch();location.hash="#/term/"+encodeURIComponent(b.dataset.term)})});
 }
 
 /* ---------- keyboard ---------- */
 document.addEventListener("keydown",function(e){
   var tag=(e.target.tagName||"").toLowerCase();
+  if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==="k"){e.preventDefault();openSearch();return}
   if(tag==="input"||tag==="textarea")return;
   if(e.key==="/"){e.preventDefault();openSearch()}
+  else if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==="k"){e.preventDefault();openSearch()}
   else if(e.key==="Escape"){closeSearch();closePop()}
 });
 
@@ -708,10 +901,11 @@ document.getElementById("gateForm").addEventListener("submit",function(e){
 try{var sv=localStorage.getItem("dedew-theme");if(sv)document.documentElement.setAttribute("data-theme",sv)}catch(e){}
 document.getElementById("themeBtn").addEventListener("click",function(){
   var c=document.documentElement.getAttribute("data-theme");
-  var dark=c?c==="dark":matchMedia("(prefers-color-scheme:dark)").matches;
-  var nx=dark?"light":"dark";
+  if(!c)c=matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light";
+  var order=["light","sepia","dark"], nx=order[(order.indexOf(c)+1)%order.length];
   document.documentElement.setAttribute("data-theme",nx);
   try{localStorage.setItem("dedew-theme",nx)}catch(e){}
+  toast(nx==="sepia"?"Sepia \u2014 easier for long reading":nx.charAt(0).toUpperCase()+nx.slice(1));
 });
 
 var nav=document.getElementById("nav");
@@ -816,7 +1010,7 @@ function vOnAir(){
   var s=S_();
   return '<section class="sec"><div class="wrap">'
    +'<div class="sec-head r r1"><p class="eyebrow">Section two</p><h2>Answered On Air</h2>'
-   +'<p>'+n(s.onair||401)+' questions put to the Sheikh that he answered aloud. The source publishes the question and a recording — no written answer exists, so none is shown. The question is translated; the answer is in the audio.</p></div>'
+   +'<p>'+n(s.onair||401)+' questions put to the Sheikh that he answered aloud. No written answer exists, so none is shown — the question is translated, and '+n(s.onair_playable||396)+' of the recordings play here.</p></div>'
    +'<div class="controls r r2"><label class="search"><span style="color:var(--ink-4)">⌕</span>'
    +'<input id="airQ" type="search" placeholder="Search questions…"></label></div>'
    +'<div id="airRows" class="r r3"><p class="loading">Loading…</p></div></div></section>';
@@ -824,21 +1018,41 @@ function vOnAir(){
 
 function airRender(){
   var box=document.getElementById("airRows"); if(!box||!D.onair)return;
-  var q=S.airQ.trim().toLowerCase();
+  var q=S.airQ.trim(), ar=hasArabic(q), lq=ar?normAr(q):q.toLowerCase();
   var list=D.onair.filter(function(a){
     if(!q)return true;
-    return (a.title_en||"").toLowerCase().indexOf(q)>-1||(a.title_ar||"").indexOf(S.airQ.trim())>-1});
+    return ar ? normAr(a.title_ar||"").indexOf(lq)>-1
+              : (a.title_en||"").toLowerCase().indexOf(lq)>-1;
+  });
   if(!list.length){box.innerHTML='<p class="empty">Nothing matches that search.</p>';return}
   var h='<div class="rows">'+list.slice(0,S.airN).map(function(a){
-    return '<a class="row" style="text-decoration:none" href="'+esc(a.source_url||"#")+'" target="_blank" rel="noopener">'
+    return '<button class="row" data-i="'+a.id+'" data-vid="'+esc(a.vid||"")+'">'
       +'<span class="row-kind">Question</span>'
       +'<span class="row-main"><span class="row-title">'+esc(a.title_en||"Untitled")+'</span>'
       +'<p class="row-ar">'+esc(a.title_ar||"")+'</p>'
-      +'<span class="row-meta"><span class="badge soon">Answer is audio</span>'
+      +'<span class="row-meta">'+(a.vid?'<span class="badge ok">Play the answer</span>':'<span class="badge soon">Answer is audio</span>')
       +(a.cms_date?'<span class="badge">Date unverified</span>':"")+'</span></span>'
-      +'<span class="row-side">listen ↗</span></a>'}).join("")+'</div>';
-  if(list.length>S.airN)h+='<button class="more" id="airMore">Show more — '+(list.length-S.airN)+' remaining</button>';
+      +'<span class="row-side">'+(a.vid?"\u25B6":"\u2197")+'</span></button>'}).join("")+'</div>';
+  if(list.length>S.airN)h+='<button class="more" id="airMore">Show more \u2014 '+(list.length-S.airN)+' remaining</button>';
   box.innerHTML=h;
+  box.querySelectorAll(".row").forEach(function(r){
+    r.addEventListener("click",function(){
+      var vid=r.dataset.vid;
+      var next=r.nextElementSibling;
+      if(next&&next.classList.contains("vid-slot")){next.remove();return}
+      box.querySelectorAll(".vid-slot").forEach(function(x){x.remove()});
+      var rec=(D.onair||[]).filter(function(x){return String(x.id)===String(r.dataset.i)})[0]||{};
+      var slot=document.createElement("div");
+      slot.className="vid-slot";
+      slot.style.padding="0 6px 22px";
+      slot.innerHTML = vid
+        ? '<div class="vid"><iframe src="https://www.youtube.com/embed/'+esc(vid)+'" title="Recording" allow="accelerometer; encrypted-media; picture-in-picture" allowfullscreen loading="lazy"></iframe></div>'
+          +'<p style="margin:0"><a href="'+esc(rec.source_url||"#")+'" target="_blank" rel="noopener" style="font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--gold)">Open the original page \u2197</a></p>'
+        : '<div class="notice">No recording is embedded on the source page for this question. <a href="'+esc(rec.source_url||"#")+'" target="_blank" rel="noopener">Open the original \u2197</a></div>';
+      r.after(slot);
+      slot.scrollIntoView({behavior:"smooth",block:"nearest"});
+    });
+  });
   var m=document.getElementById("airMore"); if(m)m.addEventListener("click",function(){S.airN+=60;airRender()});
 }
 
@@ -864,7 +1078,10 @@ function textRender(id,deepP){
     notice+='<div class="notice"><strong>The date shown is not the date of composition.</strong> The source serves a bulk-upload timestamp; several texts are demonstrably years older than their stamp.</div>';
   var badges='<span class="badge draft">Unreviewed draft</span><span class="badge">'+esc((a.type||"text").replace("_"," "))+'</span>'
     +(a.chars_ar?'<span class="badge">'+n(a.chars_ar)+' Arabic characters</span>':"")
-    +(a.category_en?'<span class="badge">'+esc(a.category_en)+'</span>':"");
+    +(a.category_en?'<span class="badge">'+esc(a.category_en)+'</span>':"")
+    +((a.subj||[]).map(function(k){
+        var lb=(D.subj&&D.subj.labels&&D.subj.labels[k])||k;
+        return '<a class="tag" href="#/subject/'+encodeURIComponent(k)+'">'+esc(lb)+'</a>'}).join(""));
   var fl=(a.flags||[]).filter(function(f){return f&&typeof f==="object"});
   var fh="";
   if(fl.length){
@@ -885,13 +1102,19 @@ function textRender(id,deepP){
     +'<button class="tbtn'+(PREF.view==="en"?" on":"")+'" data-view="en">English</button>'
     +'<button class="tbtn'+(PREF.view==="ar"?" on":"")+'" data-view="ar">العربية</button>'
     +'<button class="tbtn" id="printBtn" title="Print or save as PDF">Print</button>'
-    +'</div></div>';
+    +'</div><div class="grp"><span class="lab">Arabic</span>'
+    +'<button class="tbtn'+(PREF.tash?" on":"")+'" id="tashBtn" title="Show or hide vowel marks">Tashk\u012bl</button>'
+    +[["amiri","Amiri"],["naskh","Naskh"],["sheher","Scheherazade"]].map(function(f){
+        return '<button class="tbtn'+(PREF.arfont===f[0]?" on":"")+'" data-arfont="'+f[0]+'">'+f[1]+'</button>'}).join("")
+    +'</div><div class="grp"><span class="lab">Listen</span>'
+    +'<button class="tbtn" id="ttsBtn">\u25B6 Read aloud</button></div></div>';
 
+  var video=a.vid?'<div class="vid"><iframe src="https://www.youtube.com/embed/'+esc(a.vid)+'" title="Recording" allow="accelerometer; encrypted-media; picture-in-picture" allowfullscreen loading="lazy"></iframe></div>':"";
   box.innerHTML='<button class="back" id="back">← All written works</button>'+notice
     +'<h1 class="r r1">'+esc(a.title_en||"Untitled")+'</h1>'
     +'<p class="reader-ar-title r r1">'+esc(a.title_ar||"")+'</p>'
     +'<div class="reader-meta r r2">'+badges+'</div>'
-    +tools
+    +tools+video
     +'<div class="pages r r3">'
       +'<div class="page" id="pgEn"><p class="page-label">English — draft</p><div class="body-en">'+linkGlossary(parasNum(a.body_en,"en"))+'</div></div>'
       +'<div class="page" id="pgAr"><p class="page-label">العربية — الأصل</p><div class="body-ar">'+parasNum(a.body_ar,"ar")+'</div></div>'
@@ -909,6 +1132,14 @@ function textRender(id,deepP){
   function applyPref(){
     readerEl.dataset.size=PREF.size;
     readerEl.dataset.view=PREF.view;
+    readerEl.dataset.arfont=PREF.arfont||"amiri";
+    var arBox=box.querySelector(".body-ar");
+    if(arBox){
+      arBox.querySelectorAll("p").forEach(function(pp){
+        if(!pp.dataset.full)pp.dataset.full=pp.textContent;
+        pp.textContent=PREF.tash?pp.dataset.full:pp.dataset.full.replace(TASH,"");
+      });
+    }
   }
   applyPref();
   box.querySelector(".rtools").addEventListener("click",function(e){
@@ -922,6 +1153,12 @@ function textRender(id,deepP){
       PREF.view=b.dataset.view;
       this.querySelectorAll("[data-view]").forEach(function(x){x.classList.toggle("on",x===b)});
     }
+    if(b.id==="tashBtn"){PREF.tash=!PREF.tash;b.classList.toggle("on",PREF.tash)}
+    if(b.dataset.arfont){
+      PREF.arfont=b.dataset.arfont;
+      this.querySelectorAll("[data-arfont]").forEach(function(x){x.classList.toggle("on",x===b)});
+    }
+    if(b.id==="ttsBtn"){speakToggle(b,a);return}
     savePref(); applyPref();
   });
 
@@ -984,6 +1221,7 @@ function textBind(id,deepP){
   var need=[];
   if(!D.full)need.push(get("data/articles-full.json").then(function(j){D.full=j}));
   if(!D.gloss)need.push(get("data/glossary.json").then(function(j){D.gloss=j}).catch(function(){}));
+  if(!D.subj)need.push(get("data/subjects.json").then(function(j){D.subj=j}).catch(function(){}));
   if(!need.length)return textRender(id,deepP);
   Promise.all(need).then(function(){textRender(id,deepP)})
    .catch(function(){document.getElementById("readerBox").innerHTML='<p class="empty">The text could not be loaded.</p>'});
@@ -1014,6 +1252,65 @@ function savedBind(){
   if(D.idx)return savedRender();
   get("data/articles-index.json").then(function(j){D.idx=j;savedRender()})
    .catch(function(){document.getElementById("savedBox").innerHTML='<p class="empty">Could not load.</p>'});
+}
+
+/* ---------- subjects ---------- */
+function vSubjects(){
+  return '<section class="sec"><div class="wrap">'
+   +'<div class="sec-head r r1"><p class="eyebrow">Browse</p><h2>Subjects</h2>'
+   +'<p>Derived from the terminology each text actually uses, weighted so vocabulary common to all scholarly prose counts for less. '
+   +'A text can carry two subjects. Those without enough distinctive terminology are left unclassified rather than guessed at.</p></div>'
+   +'<div id="subjBox" class="r r2"><p class="loading">Loading\u2026</p></div></div></section>';
+}
+function subjRender(){
+  var box=document.getElementById("subjBox"); if(!box||!D.subj||!D.idx)return;
+  var counts=D.subj.counts||{}, labels=D.subj.labels||{};
+  var keys=Object.keys(counts).sort(function(a,b){return counts[b]-counts[a]});
+  if(!keys.length){box.innerHTML='<p class="empty">No subjects derived.</p>';return}
+  var max=counts[keys[0]]||1;
+  box.innerHTML='<div class="subjgrid">'+keys.map(function(k){
+      return '<button class="subj" data-s="'+esc(k)+'"><span class="nm">'+esc(labels[k]||k)+'</span>'
+        +'<span class="bar"><i style="width:'+Math.round(counts[k]/max*100)+'%"></i></span>'
+        +'<span class="ct">'+counts[k]+' text'+(counts[k]===1?"":"s")+'</span></button>'}).join("")+'</div>'
+    +'<p class="srch-hint" style="margin-top:20px">'+(D.subj.classified||0)+' of '+(D.subj.total||0)
+    +' readable texts carry at least one subject.</p>';
+  box.querySelectorAll(".subj").forEach(function(b){
+    b.addEventListener("click",function(){location.hash="#/subject/"+encodeURIComponent(b.dataset.s)})});
+}
+function subjBind(){
+  var need=[];
+  if(!D.subj)need.push(get("data/subjects.json").then(function(j){D.subj=j}));
+  if(!D.idx)need.push(get("data/articles-index.json").then(function(j){D.idx=j}));
+  if(!need.length)return subjRender();
+  Promise.all(need).then(subjRender)
+   .catch(function(){document.getElementById("subjBox").innerHTML='<p class="empty">Could not load.</p>'});
+}
+function vSubject(k){return '<section class="sec"><div class="wrap" id="oneSubj"><p class="loading">Loading\u2026</p></div></section>'}
+function subjectRender(k){
+  var box=document.getElementById("oneSubj"); if(!box||!D.idx||!D.subj)return;
+  var label=(D.subj.labels||{})[k]||k;
+  var list=D.idx.filter(function(a){return a.gate==="open"&&(a.subj||[]).indexOf(k)>-1});
+  box.innerHTML='<button class="back" id="back">\u2190 All subjects</button>'
+   +'<div class="sec-head"><p class="eyebrow">Subject</p><h2>'+esc(label)+'</h2>'
+   +'<p>'+list.length+' text'+(list.length===1?"":"s")+' where this is among the two strongest subjects.</p></div>'
+   +(list.length?'<div class="rows">'+list.map(function(a){
+      return '<button class="row" data-id="'+a.id+'">'
+        +'<span class="row-kind">'+esc((a.type||"").replace("_"," "))+'</span>'
+        +'<span class="row-main"><span class="row-title">'+esc(a.title_en||"Untitled")+'</span>'
+        +'<p class="row-ar">'+esc(a.title_ar||"")+'</p></span>'
+        +'<span class="row-side">'+n(a.chars_ar)+' ch</span></button>'}).join("")+'</div>'
+     :'<p class="empty">No texts.</p>');
+  document.getElementById("back").addEventListener("click",function(){location.hash="#/subjects"});
+  box.querySelectorAll(".row").forEach(function(r){
+    r.addEventListener("click",function(){location.hash="#/text/"+r.dataset.id})});
+}
+function subjectBind(k){
+  var need=[];
+  if(!D.subj)need.push(get("data/subjects.json").then(function(j){D.subj=j}));
+  if(!D.idx)need.push(get("data/articles-index.json").then(function(j){D.idx=j}));
+  if(!need.length)return subjectRender(k);
+  Promise.all(need).then(function(){subjectRender(k)})
+   .catch(function(){document.getElementById("oneSubj").innerHTML='<p class="empty">Could not load.</p>'});
 }
 
 /* ---------- held ---------- */
@@ -1147,13 +1444,15 @@ function glRender(q){
   q=(q||"").trim().toLowerCase();
   var list=D.gloss.terms.filter(function(t){
     if(!q)return true;
-    return (t.en||"").toLowerCase().indexOf(q)>-1||(t.tr||"").toLowerCase().indexOf(q)>-1
-      ||(t.ar||"").indexOf(q)>-1||(t.field||"").indexOf(q)>-1});
+    var nq=normLat(q);
+    return normLat(t.en).indexOf(nq)>-1||normLat(t.tr).indexOf(nq)>-1
+      ||normAr(t.ar||"").indexOf(normAr(q))>-1||(t.field||"").indexOf(q)>-1});
   if(!list.length){box.innerHTML='<p class="empty">No term matches that.</p>';return}
   box.innerHTML='<div class="gloss">'+list.map(function(t){
-    return '<div class="term"><div><p class="term-ar">'+esc(t.ar)+'</p><span class="term-tr">'+esc(t.tr)+'</span></div>'
+    return '<a class="term" href="#/term/'+encodeURIComponent(t.tr)+'" style="text-decoration:none">'
+      +'<div><p class="term-ar">'+esc(t.ar)+'</p><span class="term-tr">'+esc(t.tr)+'</span></div>'
       +'<div><p class="term-en">'+esc(t.en)+'</p>'+(t.note?'<p class="term-note">'+esc(t.note)+'</p>':"")
-      +'<span class="term-field">'+esc(t.field||"")+'</span></div></div>'}).join("")+'</div>';
+      +'<span class="term-field">'+esc(t.field||"")+'</span></div></a>'}).join("")+'</div>';
 }
 
 function glBind(){
@@ -1198,6 +1497,9 @@ function route(){
     var dp=(p[2]&&/^p\d+$/.test(p[2]))?p[2].slice(1):null; textBind(p[1],dp)}
   else if(page==="media"){view.innerHTML=vMedia();medBind()}
   else if(page==="lectures"){view.innerHTML='<section class="sec"><div class="wrap" id="catView"><p class="loading">Loading recordings…</p></div></section>';catBind(p[1])}
+  else if(page==="subjects"){view.innerHTML=vSubjects();subjBind()}
+  else if(page==="subject"){var sk=decodeURIComponent(p[1]||"");view.innerHTML=vSubject(sk);subjectBind(sk)}
+  else if(page==="term"){view.innerHTML=vTerm(decodeURIComponent(p[1]||""));termBind(decodeURIComponent(p[1]||""))}
   else if(page==="saved"){view.innerHTML=vSaved();savedBind()}
   else if(page==="review"){view.innerHTML=vReview();revBind()}
   else if(page==="glossary"){view.innerHTML=vGloss();glBind()}
